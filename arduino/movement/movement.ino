@@ -1,7 +1,8 @@
 #include <avr/interrupt.h>
 #include <avr/io.h>
 #include "config.h"
-//USAGE TeensyStep
+#include <AccelStepper.h>
+#include "math.h"
 //ADD STOP BUTTUN
 
 union {
@@ -17,11 +18,10 @@ bool RXcomplete;
 int TXpoint;
 bool TXcomplete;
 
-StepControl controller; 
-Stepper motor_TR(STEP_TR, DIR_TR);
-Stepper motor_TL(STEP_TL, DIR_TL);
-Stepper motor_BR(STEP_BR, DIR_BR);
-Stepper motor_BL(STEP_BL, DIR_BL);
+AccelStepper motor_TR(1, STEP_TR, DIR_TR);
+AccelStepper motor_TL(1, STEP_TL, DIR_TL);
+AccelStepper motor_BR(1, STEP_BR, DIR_BR);
+AccelStepper motor_BL(1, STEP_BL, DIR_BL);
 
 ISR(USART_RX_vect){
     uint8_t r = UDR0;
@@ -79,14 +79,26 @@ void cmd_S(){
     motor_BR.setAcceleration(cmd.value[1]*mm2step*mm2step)
     motor_BL.setAcceleration(cmd.value[1]*mm2step*mm2step)
 }
+
 void cmd_V(){
     motor_TR.setMaxSpeed(cmd.value[0]*mm2step)
     motor_TL.setMaxSpeed(cmd.value[1]*mm2step)
     motor_BR.setMaxSpeed(cmd.value[2]*mm2step)
     motor_BL.setMaxSpeed(cmd.value[3]*mm2step)
 }
-void cmd_M(){}
+
+void cmd_M(){
+    motor_TR.setMaxSpeed()//Vc-Vs+W(w+h)
+    motor_TL.setMaxSpeed()//Vc+Vs-W(w+h)
+    motor_BR.setMaxSpeed()//Vc+Vs+W(w+h)
+    motor_BL.setMaxSpeed()//Vc-Vs-W(w+h)
+}
 void cmd_E(){}
 void cmd_D(){}
 void cmd_S(){}
 void cmd_P(){}
+
+// motor_TR
+// motor_TL
+// motor_BR
+// motor_BL

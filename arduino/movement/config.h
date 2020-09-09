@@ -19,7 +19,8 @@
 //@mechanical
 #define width 200
 #define heigth 200
-#define length (width*width+heigth*heigth)^0.5
+#define w width/2
+#define h heigth/2
 
 //@unit
 #define mm2step 1.0

@@ -16,11 +16,10 @@
 #define STEP_BL 4
 #define DIR_BL 8
 
-//@mechanical
-#define width 200
-#define heigth 200
-#define w width/2
-#define h heigth/2
-
 //@unit
 #define mm2step 1.0
+
+//@mechanical
+#define width 200*mm2step
+#define heigth 200*mm2step
+#define distance width+heigth

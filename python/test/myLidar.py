@@ -24,9 +24,12 @@ class myLidar(Thread):
 
     def connect(self):
         ports = serial_ports()
-        for port in ports:
-            if self.lidar.connect(port=port):
-                break
+        ready = 0
+        while not ready:
+            for port in ports:
+                if self.lidar.connect(port=port):
+                    ready = 1
+                    break
 
     def disconnect(self):
         self.lidar.disconnect()

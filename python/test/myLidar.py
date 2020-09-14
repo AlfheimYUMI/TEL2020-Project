@@ -40,6 +40,7 @@ class myLidar(Thread):
                 self.update()
             else:
                 sleep(0.2)
+        self.lidar.stop_motor()
 
     def update(self):
         for measurment in self.lidar.iter_measurments(360):

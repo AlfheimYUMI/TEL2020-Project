@@ -8,17 +8,19 @@
 #define endcount 3
 
 //@motor
-#define STEP_TR 1
-#define DIR_TR 5
+#define EN 6
 
-#define STEP_TL 2
-#define DIR_TL 6
+#define STEP_TR A2
+#define DIR_TR A3
 
-#define STEP_BR 3
-#define DIR_BR 7
+#define STEP_TL 5
+#define DIR_TL 4
 
-#define STEP_BL 4
-#define DIR_BL 8
+#define STEP_BR A4
+#define DIR_BR A5
+
+#define STEP_BL 3
+#define DIR_BL 2
 
 //@unit
 #define mm2step 1.0

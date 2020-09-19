@@ -1,6 +1,6 @@
+#include "AccelStepper.h"
 #include "config.h"
 #include "math.h"
-#include "AccelStepper.h"
 #include <avr/interrupt.h>
 #include <avr/io.h>
 //ADD STOP BUTTUN
@@ -50,6 +50,10 @@ void serialEvent()
     while (Serial.available())
     {
         char inChar = Serial.read();
+        #ifdef DEBUG
+        Serial.print("read: ");
+        Serial.println(inChar);
+        #endif
         if (inChar == endchar)
         {
             endCount += 1;
@@ -76,7 +80,14 @@ void setup()
     endCount = 0;
     RXcomplete = false;
     lasttime = millis();
-    Serial.begin(9600);
+    pinMode(EN, OUTPUT);
+    digitalWrite(EN, LOW);
+    Serial.begin(BAUDRATE);
+    Serial.println("Initial finish...");
+    motor_TR.setMaxSpeed(1000);
+    motor_TL.setMaxSpeed(1000);
+    motor_BR.setMaxSpeed(1000);
+    motor_BL.setMaxSpeed(1000);
 }
 
 void loop()
@@ -92,10 +103,18 @@ void loop()
     }
     if (timeout)
     {
+        lasttime = millis();
+        timeout = false;
+        RXpoint = 0;
+        endCount = 0;
+        #ifdef DEBUG
+        RXcomplete = true;
+        #else
         motor_TR.setSpeed(0);
         motor_TL.setSpeed(0);
         motor_BR.setSpeed(0);
         motor_BL.setSpeed(0);
+        #endif
     }
     motor_TR.runSpeed();
     motor_TL.runSpeed();
@@ -131,6 +150,16 @@ void reciveComplete()
     default:
         break;
     }
+#ifdef DEBUG
+    Serial.print(cmd.instruction);
+    Serial.print(" ");
+    for (int i = 0; i < valueNum; i++)
+    {
+        Serial.print(cmd.value[i]);
+        Serial.print('\t');
+    }
+    Serial.print('\n');
+#endif
     cmd.instruction = 0;
     RXcomplete = false;
 }

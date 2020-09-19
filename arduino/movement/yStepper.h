@@ -1,5 +1,3 @@
-yStepper.h
-
 #ifndef yStepper_h
 #define yStepper_h
 

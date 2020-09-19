@@ -2,13 +2,15 @@ from mrplidar import RPLidar
 from serialport import serial_ports
 from threading import Thread
 from time import sleep, time
+from tool import only
 
 import threading
 
 PATH = '/'.join(__file__.split('/')[:-1])
 
-
-class myLidar(Thread):
+#TODO: 急速模式
+@only
+class MyLidar(Thread):
 
     def __init__(self):
         Thread.__init__(self)
@@ -21,14 +23,16 @@ class myLidar(Thread):
         self.realData = []
         self.tmp = []
         self.stop = 0
+        self.ready = 0
 
-    def connect(self):
+    def connect(self, force=0):
+        if force:
+            self.ready = 0
         ports = serial_ports()
-        ready = 0
-        while not ready:
+        while not self.ready:
             for port in ports:
                 if self.lidar.connect(port=port):
-                    ready = 1
+                    self.ready = 1
                     break
 
     def disconnect(self):
@@ -40,12 +44,12 @@ class myLidar(Thread):
     def run(self):
         while not self.stop:
             if self.scan:
-                self.update()
+                self.recive()
             else:
                 sleep(0.2)
         self.lidar.stop_motor()
 
-    def update(self):
+    def recive(self):
         for measurment in self.lidar.iter_measurments(360):
             if not self.scan or self.stop:
                 break
@@ -59,7 +63,6 @@ class myLidar(Thread):
                 self.realData = self.tmp
                 self.tmp = []
                 print('new data')
-                pass
 
     def getData(self, deg=0):
         self.threadLock.acquire()
@@ -77,7 +80,7 @@ class myLidar(Thread):
         self.stop = 1
 
 if __name__ == "__main__":
-    lidar = myLidar()
+    lidar = MyLidar()
     lidar.connect()
     lidar.start()
     while 1:

@@ -83,11 +83,17 @@ void setup()
     pinMode(EN, OUTPUT);
     digitalWrite(EN, LOW);
     Serial.begin(BAUDRATE);
-    Serial.println("Initial finish...");
     motor_TR.setMaxSpeed(1000);
     motor_TL.setMaxSpeed(1000);
     motor_BR.setMaxSpeed(1000);
     motor_BL.setMaxSpeed(1000);
+    motor_TR.setAcceleration(1000);
+    motor_TL.setAcceleration(1000);
+    motor_BR.setAcceleration(1000);
+    motor_BL.setAcceleration(1000);
+    motor_TR.setPinsInverted(true, false, false);
+    motor_BR.setPinsInverted(true, false, false);
+    Serial.println("Initial finish...");
 }
 
 void loop()

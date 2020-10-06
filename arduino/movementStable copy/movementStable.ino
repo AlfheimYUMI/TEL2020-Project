@@ -33,6 +33,7 @@ union {
     };
 } cmd;
 
+String recive = "";
 int RXpoint;
 bool RXcomplete;
 char endCount;
@@ -50,23 +51,13 @@ void serialEvent()
     while (Serial.available())
     {
         char inChar = Serial.read();
-        if (RXpoint < commandLength)
-        {
-            cmd.cmdLine[RXpoint++] = inChar;
-            Serial.println(int(inChar));
-        }
         if (inChar == endchar)
         {
-            endCount += 1;
-            if (endCount == endcount)
-            {
-                RXpoint = 0;
-                RXcomplete = true;
-            }
+            RXcomplete = true;
         }
-        else
+        else if (inChar == startchar)
         {
-            endCount = 0;
+            recive += inchar;
         }
     }
 }
@@ -77,9 +68,9 @@ void setup()
     endCount = 0;
     RXcomplete = false;
     lasttime = millis();
+    Serial.begin(9600);
     pinMode(EN, OUTPUT);
     digitalWrite(EN, LOW);
-    Serial.begin(BAUDRATE);
     motor_TR.setMaxSpeed(1000);
     motor_TL.setMaxSpeed(1000);
     motor_BR.setMaxSpeed(1000);
@@ -88,9 +79,6 @@ void setup()
     motor_TL.setAcceleration(1000);
     motor_BR.setAcceleration(1000);
     motor_BL.setAcceleration(1000);
-    motor_TR.setPinsInverted(true, false, false);
-    motor_BR.setPinsInverted(true, false, false);
-    Serial.println("Initial finish...");
 }
 
 void loop()
@@ -130,6 +118,12 @@ void loop()
 
 void reciveComplete()
 {
+    while(tmp<recive.length()){
+        
+        tmp = recive.indexOf(',', tmp)+1
+    }
+    tmp = 0;
+
     switch (cmd.instruction)
     {
     case 'S':

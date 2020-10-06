@@ -37,6 +37,7 @@ class MyLidar(Thread):
 
     def disconnect(self):
         self.lidar.disconnect()
+        self.ready = 0
 
     def pwm(self, pwm=511):
         self.lidar.set_pwm(pwm)

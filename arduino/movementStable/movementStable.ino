@@ -50,6 +50,11 @@ void serialEvent()
     while (Serial.available())
     {
         char inChar = Serial.read();
+        if (RXpoint < commandLength)
+        {
+            cmd.cmdLine[RXpoint++] = inChar;
+            Serial.println(int(inChar));
+        }
         if (inChar == endchar)
         {
             endCount += 1;
@@ -63,10 +68,6 @@ void serialEvent()
         {
             endCount = 0;
         }
-        if (RXpoint < commandLength)
-        {
-            cmd.cmdLine[RXpoint++] = inChar;
-        }
     }
 }
 
@@ -77,6 +78,16 @@ void setup()
     RXcomplete = false;
     lasttime = millis();
     Serial.begin(9600);
+    pinMode(EN, OUTPUT);
+    digitalWrite(EN, LOW);
+    motor_TR.setMaxSpeed(1000);
+    motor_TL.setMaxSpeed(1000);
+    motor_BR.setMaxSpeed(1000);
+    motor_BL.setMaxSpeed(1000);
+    motor_TR.setAcceleration(1000);
+    motor_TL.setAcceleration(1000);
+    motor_BR.setAcceleration(1000);
+    motor_BL.setAcceleration(1000);
 }
 
 void loop()
@@ -92,10 +103,21 @@ void loop()
     }
     if (timeout)
     {
+      #ifdef DEBUG
+    Serial.print(cmd.instruction);Serial.print("\t");
+    Serial.print(cmd.value[0]);Serial.print("\t");
+    Serial.print(cmd.value[1]);Serial.print("\t");
+    Serial.print(cmd.value[2]);Serial.print("\t");
+    Serial.print(cmd.value[3]);Serial.print("\t");
+    Serial.print(cmd.value[4]);Serial.print("\n");
+      #else
         motor_TR.setSpeed(0);
         motor_TL.setSpeed(0);
         motor_BR.setSpeed(0);
         motor_BL.setSpeed(0);
+        #endif
+        lasttime = millis();
+        timeout = false;
     }
     motor_TR.runSpeed();
     motor_TL.runSpeed();
@@ -131,7 +153,13 @@ void reciveComplete()
     default:
         break;
     }
-    cmd.instruction = 0;
+//     cmd.instruction = 'i';
+    Serial.print(cmd.instruction);Serial.print("\t");
+    Serial.print(cmd.value[0]);Serial.print("\t");
+    Serial.print(cmd.value[1]);Serial.print("\t");
+    Serial.print(cmd.value[2]);Serial.print("\t");
+    Serial.print(cmd.value[3]);Serial.print("\t");
+    Serial.print(cmd.value[4]);Serial.print("\n");
     RXcomplete = false;
 }
 

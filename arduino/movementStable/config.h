@@ -4,7 +4,7 @@
 #define valueNum 8
 #define commandLength 2*valueNum+2
 #define TIMEOUT 500
-#define endchar -1
+#define endchar -1 //NoTe char in arduino is signed, so 0xff will be -1
 #define endcount 3
 
 //@motor

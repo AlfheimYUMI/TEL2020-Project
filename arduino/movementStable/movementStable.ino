@@ -77,9 +77,9 @@ void setup()
     endCount = 0;
     RXcomplete = false;
     lasttime = millis();
-    Serial.begin(9600);
     pinMode(EN, OUTPUT);
     digitalWrite(EN, LOW);
+    Serial.begin(BAUDRATE);
     motor_TR.setMaxSpeed(1000);
     motor_TL.setMaxSpeed(1000);
     motor_BR.setMaxSpeed(1000);
@@ -88,6 +88,9 @@ void setup()
     motor_TL.setAcceleration(1000);
     motor_BR.setAcceleration(1000);
     motor_BL.setAcceleration(1000);
+    motor_TR.setPinsInverted(true, false, false);
+    motor_BR.setPinsInverted(true, false, false);
+    Serial.println("Initial finish...");
 }
 
 void loop()

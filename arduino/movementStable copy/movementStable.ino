@@ -24,19 +24,10 @@ TODO
     Timer2:8bits output low for stepper
 */
 
-union {
-    char cmdLine[commandLength];
-    struct
-    {
-        char instruction;
-        int16_t value[valueNum];
-    };
-} cmd;
-
-String recive = "";
-int RXpoint;
+String inString = "";
+uint8_t comma;
+int8_t value[valueBuffer];
 bool RXcomplete;
-char endCount;
 bool timeout;
 unsigned long lasttime;
 
@@ -51,6 +42,29 @@ void serialEvent()
     while (Serial.available())
     {
         char inChar = Serial.read();
+        switch (inChar)
+        {
+        case startchar:
+            inString = "";
+            comma = 0;
+            break;
+        case endchar:
+            RXcomplete = true;
+        case splitchar:
+            if (comma)
+            {
+                value[comma - 1] = inString.toInt();
+            }
+            else
+            {
+                instruction = inString[0];
+            }
+            inString = "";
+            comma++;
+            break;
+        default:
+            inString += inChar;
+        }
         if (inChar == endchar)
         {
             RXcomplete = true;
@@ -65,10 +79,9 @@ void serialEvent()
 void setup()
 {
     RXpoint = 0;
-    endCount = 0;
     RXcomplete = false;
     lasttime = millis();
-    Serial.begin(9600);
+    Serial.begin(BAUDRATE);
     pinMode(EN, OUTPUT);
     digitalWrite(EN, LOW);
     motor_TR.setMaxSpeed(1000);
@@ -94,21 +107,6 @@ void loop()
     }
     if (timeout)
     {
-      #ifdef DEBUG
-    Serial.print(cmd.instruction);Serial.print("\t");
-    Serial.print(cmd.value[0]);Serial.print("\t");
-    Serial.print(cmd.value[1]);Serial.print("\t");
-    Serial.print(cmd.value[2]);Serial.print("\t");
-    Serial.print(cmd.value[3]);Serial.print("\t");
-    Serial.print(cmd.value[4]);Serial.print("\n");
-      #else
-        motor_TR.setSpeed(0);
-        motor_TL.setSpeed(0);
-        motor_BR.setSpeed(0);
-        motor_BL.setSpeed(0);
-        #endif
-        lasttime = millis();
-        timeout = false;
     }
     motor_TR.runSpeed();
     motor_TL.runSpeed();
@@ -118,13 +116,7 @@ void loop()
 
 void reciveComplete()
 {
-    while(tmp<recive.length()){
-        
-        tmp = recive.indexOf(',', tmp)+1
-    }
-    tmp = 0;
-
-    switch (cmd.instruction)
+    switch (instruction)
     {
     case 'S':
         cmd_S();
@@ -150,42 +142,45 @@ void reciveComplete()
     default:
         break;
     }
-//     cmd.instruction = 'i';
-    Serial.print(cmd.instruction);Serial.print("\t");
-    Serial.print(cmd.value[0]);Serial.print("\t");
-    Serial.print(cmd.value[1]);Serial.print("\t");
-    Serial.print(cmd.value[2]);Serial.print("\t");
-    Serial.print(cmd.value[3]);Serial.print("\t");
-    Serial.print(cmd.value[4]);Serial.print("\n");
+#ifdef DEBUG
+    Serial.print("cmd: ");
+    Serial.println(instruction);
+    for (int i = 0; i < valueBuffer; i++)
+    {
+        Serial.print(value[i]);
+        Serial.print("\t");
+    }
+    Serial.print('\n');
     RXcomplete = false;
+#endif
 }
 
 void cmd_S()
 {
-    motor_TR.setMaxSpeed(cmd.value[0] * mm2step);
-    motor_TL.setMaxSpeed(cmd.value[0] * mm2step);
-    motor_BR.setMaxSpeed(cmd.value[0] * mm2step);
-    motor_BL.setMaxSpeed(cmd.value[0] * mm2step);
-    motor_TR.setAcceleration(cmd.value[1] * mm2step * mm2step);
-    motor_TL.setAcceleration(cmd.value[1] * mm2step * mm2step);
-    motor_BR.setAcceleration(cmd.value[1] * mm2step * mm2step);
-    motor_BL.setAcceleration(cmd.value[1] * mm2step * mm2step);
+    motor_TR.setMaxSpeed(value[0] * mm2step);
+    motor_TL.setMaxSpeed(value[0] * mm2step);
+    motor_BR.setMaxSpeed(value[0] * mm2step);
+    motor_BL.setMaxSpeed(value[0] * mm2step);
+    motor_TR.setAcceleration(value[1] * mm2step * mm2step);
+    motor_TL.setAcceleration(value[1] * mm2step * mm2step);
+    motor_BR.setAcceleration(value[1] * mm2step * mm2step);
+    motor_BL.setAcceleration(value[1] * mm2step * mm2step);
 }
 
 void cmd_V()
 {
-    motor_TR.setSpeed(cmd.value[0] * mm2step);
-    motor_TL.setSpeed(cmd.value[1] * mm2step);
-    motor_BR.setSpeed(cmd.value[2] * mm2step);
-    motor_BL.setSpeed(cmd.value[3] * mm2step);
+    motor_TR.setSpeed(value[0] * mm2step);
+    motor_TL.setSpeed(value[1] * mm2step);
+    motor_BR.setSpeed(value[2] * mm2step);
+    motor_BL.setSpeed(value[3] * mm2step);
 }
 
 void cmd_M()
 {
-    motor_TR.setSpeed(cmd.value[0] * (cos(cmd.value[1]) - sin(cmd.value[1])) + cmd.value[1] * distance); //Vc-Vs+W(w+h)
-    motor_TL.setSpeed(cmd.value[0] * (cos(cmd.value[1]) + sin(cmd.value[1])) - cmd.value[1] * distance); //Vc+Vs-W(w+h)
-    motor_BR.setSpeed(cmd.value[0] * (cos(cmd.value[1]) + sin(cmd.value[1])) + cmd.value[1] * distance); //Vc+Vs+W(w+h)
-    motor_BL.setSpeed(cmd.value[0] * (cos(cmd.value[1]) - sin(cmd.value[1])) - cmd.value[1] * distance); //Vc-Vs-W(w+h)
+    motor_TR.setSpeed(value[0] * (cos(value[1]) - sin(value[1])) + value[1] * distance); //Vc-Vs+W(w+h)
+    motor_TL.setSpeed(value[0] * (cos(value[1]) + sin(value[1])) - value[1] * distance); //Vc+Vs-W(w+h)
+    motor_BR.setSpeed(value[0] * (cos(value[1]) + sin(value[1])) + value[1] * distance); //Vc+Vs+W(w+h)
+    motor_BL.setSpeed(value[0] * (cos(value[1]) - sin(value[1])) - value[1] * distance); //Vc-Vs-W(w+h)
 }
 void cmd_E() {}
 void cmd_D() {}

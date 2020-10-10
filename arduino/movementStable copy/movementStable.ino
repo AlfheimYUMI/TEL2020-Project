@@ -33,7 +33,11 @@ union {
     };
 } cmd;
 
-String recive = "";
+char instruction;
+int16_t value[valueNum];
+int8_t comma = 0;
+String inString = "";
+
 int RXpoint;
 bool RXcomplete;
 char endCount;
@@ -51,13 +55,19 @@ void serialEvent()
     while (Serial.available())
     {
         char inChar = Serial.read();
-        if (inChar == endchar)
-        {
-            RXcomplete = true;
-        }
-        else if (inChar == startchar)
-        {
-            recive += inchar;
+        switch (inchar){
+            case startchar:
+                inString = "";
+                comma = 0;
+                break;
+            case endchar:
+                RXcomplete = true;
+            case splitchar:
+                value[comma++] = inString.toInt();
+                break;
+            default:
+                inString += inchar;
+                break;
         }
     }
 }
@@ -90,7 +100,7 @@ void loop()
     if (RXcomplete)
     {
         lasttime = millis();
-        reciveComplete();
+        inStringComplete();
     }
     if (timeout)
     {
@@ -116,11 +126,11 @@ void loop()
     motor_BL.runSpeed();
 }
 
-void reciveComplete()
+void inStringComplete()
 {
-    while(tmp<recive.length()){
+    while(tmp<inString.length()){
         
-        tmp = recive.indexOf(',', tmp)+1
+        tmp = inString.indexOf(',', tmp)+1
     }
     tmp = 0;
 

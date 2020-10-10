@@ -6,6 +6,7 @@
 #define TIMEOUT 500
 #define startchar '['
 #define endchar ']'
+#define splitchar ','
 #define endcount 3
 
 //@motor

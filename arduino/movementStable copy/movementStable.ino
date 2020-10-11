@@ -24,27 +24,9 @@ TODO
     Timer2:8bits output low for stepper
 */
 
-<<<<<<< HEAD
-union {
-    char cmdLine[commandLength];
-    struct
-    {
-        char instruction;
-        int16_t value[valueNum];
-    };
-} cmd;
-
-char instruction;
-int16_t value[valueNum];
-int8_t comma = 0;
-String inString = "";
-
-int RXpoint;
-=======
 String inString = "";
 uint8_t comma;
 int8_t value[valueBuffer];
->>>>>>> 4a7535eec87530d889bf8ef95efff2c373b158c7
 bool RXcomplete;
 bool timeout;
 unsigned long lasttime;

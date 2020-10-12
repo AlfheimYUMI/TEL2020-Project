@@ -4,7 +4,7 @@ menu = {
         '自動': 'run_auto',
         '手動': 'run_remote',
     },
-    '更新資料': 'fun_reflashGIT',
+    '更新資料': '~/Desktop/pull.sh',
     '程式相關': {
         '返回': None,
         # 自動產生清單

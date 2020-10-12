@@ -4,11 +4,11 @@ from threading import Thread
 from tool import *
 import menu
 import subprocess
-try:
-    import pigpio
-except ImportError:
-    display('Warning: pigio is NOT imported')
-    import mpigpio as pigpio
+import pigpio
+# try:
+# except ImportError:
+#     display('Warning: pigio is NOT imported')
+#     import mpigpio as pigpio
 
 # sudo pigpiod
 
@@ -46,7 +46,7 @@ class Entry(Thread):
             self.reflash_list()
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
-        self._pi = get_only(pigpio.pi)
+        self._pi = pigpio.pi()
         self._pi.set_mode(pin_home, pigpio.INPUT)
         self._pi.set_mode(pin_up, pigpio.INPUT)
         self._pi.set_mode(pin_down, pigpio.INPUT)

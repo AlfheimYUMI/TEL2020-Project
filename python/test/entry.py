@@ -71,8 +71,8 @@ class Entry(Thread):
     def createWindows(self):
         self.root = Tk()
         self.root.title("樹莓派執行介面")
-        # self.root.attributes("-fullscreen", True)
-        self.root.geometry('480x320')
+        self.root.attributes("-fullscreen", True)
+        # self.root.geometry('480x320')
         self.root.config(bg='#000000')
         self.status_label = Label(self.root, text='init')
         self.status_label.place(relheight=0.1, relwidth=1, relx=0, rely=0)

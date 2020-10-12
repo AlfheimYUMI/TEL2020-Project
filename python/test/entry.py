@@ -1,8 +1,18 @@
 from tkinter import *
 import tkinter.font as TkFont
 from threading import Thread
+from tool import *
 import menu
+import subprocess
+try:
+    import pigpio
+except ImportError:
+    display('Warning: pigio is NOT imported')
+    import mpigpio as pigpio
 
+# sudo pigpiod
+
+@only
 class Entry(Thread):
     def __init__(self):
         Thread.__init__(self)
@@ -15,6 +25,19 @@ class Entry(Thread):
         self.cursor = 0
         self.length = 0
         self.log = []
+        self.tick = {
+            'home': 0,
+            'up': 0,
+            'down': 0,
+            'check': 0,
+        }
+
+    def pinInit(self, pin_home=1, pin_up=2, pin_down=3, pin_check=4):
+        self._pi = get_only(pigpio.pi)
+        self._pi.callback(pin_home, pigpio.EITHER_EDGE, self._home)
+        self._pi.callback(pin_up, pigpio.RISING_EDGE , self.up)
+        self._pi.callback(pin_down, pigpio.RISING_EDGE , self.down)
+        self._pi.callback(pin_check, pigpio.RISING_EDGE , self.check)
 
     def createWindows(self):
         self.root = Tk()
@@ -46,6 +69,7 @@ class Entry(Thread):
         self.point = 0
         self.cursor = 0
         self.length = self.tmplist.__len__()
+        self.status_label.config(text=self.path[-1] if self.path else 'MENU')
         self.update()
     
     def update(self):
@@ -55,11 +79,11 @@ class Entry(Thread):
                 break
             self.display_list.insert(i, list(self.tmplist.keys())[self.point+i])
         self.display_list.selection_set(self.cursor)
-        self.print(f'{self.length}, {self.point}, {self.cursor}')
 
     def run(self):
         self.createWindows()
         self.root.mainloop()
+
 
     def down(self):
         if self.cursor < 4:
@@ -87,6 +111,18 @@ class Entry(Thread):
                 self.reflash_list()
                 return
             self.print(F'select: {target}, cmd: {self.tmplist[target]}')
+
+    def _home(self, gpio, level, tick):
+        if level == 1: # rising
+            self.tick['home'] = tick
+            # self.num1+=1
+        elif level == 0: # falling
+        # if self.num
+            passTime = tick-self.tick['home']
+            if passTime > 500000:
+                pass  # long
+            else:
+                self.home()
 
     def home(self):
         self.path = []

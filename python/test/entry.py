@@ -31,6 +31,7 @@ class Entry(Thread):
             'down': 0,
             'check': 0,
         }
+        self.subpid = []
 
     def pinInit(self, pin_home=1, pin_up=2, pin_down=3, pin_check=4):
         self._pi = get_only(pigpio.pi)

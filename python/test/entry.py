@@ -152,18 +152,17 @@ class Entry(Thread):
         if self.display_log.size() > 3:
             self.display_log.delete(0)
 
-if __name__ == "__main__":
-    app = Entry()
-    app.start()
-    while 1:
-        inn = input('>>>')
-        if not inn:
-            break
-        if inn == 'w':
-            app.up()
-        elif inn == 's':
-            app.down()
-        elif inn == 'd':
-            app.check()
-        elif inn == 'a':
-            app.home()
+app = Entry()
+app.start()
+while 1:
+    inn = input('>>>')
+    if not inn:
+        break
+    if inn == 'w':
+        app.up()
+    elif inn == 's':
+        app.down()
+    elif inn == 'd':
+        app.check()
+    elif inn == 'a':
+        app.home()

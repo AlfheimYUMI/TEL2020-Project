@@ -33,8 +33,28 @@ class Entry(Thread):
         }
         self.subpid = []
 
-    def pinInit(self, pin_home=1, pin_up=2, pin_down=3, pin_check=4):
+    def dealt(self, cmd, key):
+        if isinstance(cmd, str):
+            if cmd.startswith('fun_'):
+                self.print(F'run {cmd[4:]}')
+            elif cmd.startswith('run_'):
+                self.print(F'subp {cmd[4:]}')
+            else:
+                self.print(F'{cmd}')
+        elif key == '返回':
+            self.path.pop()
+            self.reflash_list()
+
+    def pinInit(self, pin_home=37, pin_up=35, pin_down=33, pin_check=31):
         self._pi = get_only(pigpio.pi)
+        self._pi.set_mode(pin_home, pigpio.INPUT)
+        self._pi.set_mode(pin_up, pigpio.INPUT)
+        self._pi.set_mode(pin_down, pigpio.INPUT)
+        self._pi.set_mode(pin_check, pigpio.INPUT)
+        self._pi.set_pull_up_down(pin_home, pigpio.PUD_UP)
+        self._pi.set_pull_up_down(pin_up, pigpio.PUD_UP)
+        self._pi.set_pull_up_down(pin_down, pigpio.PUD_UP)
+        self._pi.set_pull_up_down(pin_check, pigpio.PUD_UP)
         self._pi.callback(pin_home, pigpio.EITHER_EDGE, self._home)
         self._pi.callback(pin_up, pigpio.RISING_EDGE , self.up)
         self._pi.callback(pin_down, pigpio.RISING_EDGE , self.down)
@@ -43,7 +63,8 @@ class Entry(Thread):
     def createWindows(self):
         self.root = Tk()
         self.root.title("樹莓派執行介面")
-        self.root.geometry('480x320')
+        self.root.attributes("-fullscreen", True)
+        # self.root.geometry('480x320')
         self.root.config(bg='#000000')
         self.status_label = Label(self.root, text='init')
         self.status_label.place(relheight=0.1, relwidth=1, relx=0, rely=0)
@@ -107,11 +128,7 @@ class Entry(Thread):
             self.path.append(target)
             self.reflash_list()
         else:
-            if target == '返回':
-                self.path.pop()
-                self.reflash_list()
-                return
-            self.print(F'select: {target}, cmd: {self.tmplist[target]}')
+            self.dealt(self.tmplist[target], target)
 
     def _home(self, gpio, level, tick):
         if level == 1: # rising

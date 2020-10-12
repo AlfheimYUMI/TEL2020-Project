@@ -1,19 +1,28 @@
 menu = {
-    '執行主程式': 'run_main',
-    '更新資料': 'update',
-    '關閉其他程式': 'fun_closeOther',
+    '執行主程式': {
+        '返回': None,
+        '自動': 'run_auto',
+        '手動': 'run_remote',
+    },
+    '更新資料': 'fun_reflashGIT',
+    '程式相關': {
+        '返回': None,
+        # 自動產生清單
+        '執行中程式': {
+            '返回': None,
+        },
+        '執行其他程式': {
+            '返回': None,
+        }
+    },
     '網路相關': {
         '返回': None,
-        'IP': 'hostname -I',
+        'IP': 'fun_getIP',
+        # 連接其他WIFI
     },
-    'sublist': {
+    '系統': {
         '返回': None,
-        'a': 'a',
-        'b': 'b',
-        'c': 'c',
-        'd': 'd',
-        'e': 'e',
-        'f': 'f',
-        'g':'g',
-    }
+        '重新啟動': 'sudo reboot now',
+        '關機': 'sudo shutdown now',
+    },
 }

@@ -24,5 +24,6 @@ menu = {
         '返回': None,
         '重新啟動': 'sudo reboot now',
         '關機': 'sudo shutdown now',
+        '結束': None
     },
 }

@@ -46,6 +46,8 @@ class Entry(Thread):
         elif key == '返回':
             self.path.pop()
             self.reflash_list()
+        elif key == '結束':
+            self.root.destroy()
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
         self._pi = pigpio.pi()
@@ -57,10 +59,10 @@ class Entry(Thread):
         self._pi.set_pull_up_down(pin_up, pigpio.PUD_DOWN)
         self._pi.set_pull_up_down(pin_down, pigpio.PUD_DOWN)
         self._pi.set_pull_up_down(pin_check, pigpio.PUD_DOWN)
-        self._pi.set_noise_filter(pin_home, 20000, 1)
-        self._pi.set_noise_filter(pin_up, 20000, 1)
-        self._pi.set_noise_filter(pin_down, 20000, 1)
-        self._pi.set_noise_filter(pin_check, 20000, 1)
+        self._pi.set_noise_filter(pin_home, 10000, 1)
+        self._pi.set_noise_filter(pin_up, 10000, 1)
+        self._pi.set_noise_filter(pin_down, 10000, 1)
+        self._pi.set_noise_filter(pin_check, 10000, 1)
         self._pi.callback(pin_home, pigpio.EITHER_EDGE, self._home)
         self._pi.callback(pin_up, pigpio.RISING_EDGE , self.up)
         self._pi.callback(pin_down, pigpio.RISING_EDGE , self.down)

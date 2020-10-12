@@ -38,11 +38,11 @@ class Entry(Thread):
     def dealt(self, cmd, key):
         if isinstance(cmd, str):
             if cmd.startswith('fun_'):
-                self.print(F'run {cmd[4:]}')
+                self.print(F'fun {cmd[4:]}')
             elif cmd.startswith('run_'):
-                self.print(F'subp {cmd[4:]}')
+                self.print(F'run {cmd[4:]}')
             else:
-                self.print(F'{cmd}')
+                self.print(subprocess.run(cmd[4:], timeout=100, shell=True, stdout=subprocess.PIPE).stdout, 'system')
         elif key == '返回':
             self.path.pop()
             self.reflash_list()

@@ -45,7 +45,7 @@ class Entry(Thread):
             self.path.pop()
             self.reflash_list()
 
-    def pinInit(self, pin_home=37, pin_up=35, pin_down=33, pin_check=31):
+    def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
         self._pi = get_only(pigpio.pi)
         self._pi.set_mode(pin_home, pigpio.INPUT)
         self._pi.set_mode(pin_up, pigpio.INPUT)
@@ -63,8 +63,8 @@ class Entry(Thread):
     def createWindows(self):
         self.root = Tk()
         self.root.title("樹莓派執行介面")
-        self.root.attributes("-fullscreen", True)
-        # self.root.geometry('480x320')
+        # self.root.attributes("-fullscreen", True)
+        self.root.geometry('480x320')
         self.root.config(bg='#000000')
         self.status_label = Label(self.root, text='init')
         self.status_label.place(relheight=0.1, relwidth=1, relx=0, rely=0)

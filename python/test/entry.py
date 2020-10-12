@@ -109,7 +109,7 @@ class Entry(Thread):
         self.root.mainloop()
 
 
-    def down(self):
+    def down(self, *arg):
         if self.cursor < 4:
             if self.cursor<self.length-1:
                 self.cursor += 1
@@ -117,14 +117,14 @@ class Entry(Thread):
             self.point += 1
         self.update()
 
-    def up(self):
+    def up(self, *arg):
         if self.cursor > 0:
             self.cursor -= 1
         elif self.point > 0:
             self.point -= 1
         self.update()
 
-    def check(self):
+    def check(self, *arg):
         target = list(self.tmplist.keys())[self.point + self.cursor]
         if isinstance(self.tmplist[target], dict):
             self.path.append(target)

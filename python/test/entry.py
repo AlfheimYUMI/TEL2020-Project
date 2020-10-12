@@ -5,6 +5,7 @@ from tool import *
 import menu
 import subprocess
 import pigpio
+from time import sleep
 # try:
 # except ImportError:
 #     display('Warning: pigio is NOT imported')
@@ -32,6 +33,7 @@ class Entry(Thread):
             'check': 0,
         }
         self.subpid = []
+        self.pinInit()
 
     def dealt(self, cmd, key):
         if isinstance(cmd, str):

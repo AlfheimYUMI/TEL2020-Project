@@ -1,10 +1,13 @@
-//@uart
 #define DEBUG
-#define BAUDRATE 9600
-#define valueNum 8
+
+//@uart
+#define BAUDRATE 57600
+#define valueBuffer 8
 #define commandLength 2*valueNum+2
 #define TIMEOUT 500
-#define endchar -1 //NoTe char in arduino is signed, so 0xff will be -1
+#define startchar '['
+#define splitchar ','
+#define endchar ']'
 #define endcount 3
 
 //@motor

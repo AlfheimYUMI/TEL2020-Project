@@ -22,6 +22,10 @@ class pi():
         return
     def set_servo_pulsewidth(self, *args):
         return
+    def set_pull_up_down(self, *args):
+        return
+    def set_noise_filter(self, *args):
+        return
 
 def pulse(*args):
     return
@@ -32,3 +36,4 @@ EITHER_EDGE = 0
 RISING_EDGE = 0
 INPUT = 0
 PUD_UP = 0
+PUD_DOWN = 0

@@ -1,0 +1,27 @@
+{
+    "執行主程式": {
+        "返回": null,
+        "自動": "run_auto",
+        "手動": "run_remote"
+    },
+    "更新資料": "~/Desktop/pull.sh",
+    "程式相關": {
+        "返回": null,
+        "執行中程式": {
+            "返回": null
+        },
+        "執行其他程式": {
+            "返回": null
+        }
+    },
+    "網路相關": {
+        "返回": null,
+        "IP": "hostname -I"
+    },
+    "系統": {
+        "返回": null,
+        "重新啟動": "sudo reboot now",
+        "關機": "sudo shutdown now",
+        "結束": null
+    }
+}

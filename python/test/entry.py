@@ -65,6 +65,7 @@ class SOC(Thread):
             self.sel.unregister(sock)
             sock.close()
 
+
 @only
 class Entry(Thread):
     def __init__(self):
@@ -94,7 +95,7 @@ class Entry(Thread):
             elif cmd.startswith('run_'):
                 self.print(F'run {cmd[4:]}', 'run')
             elif cmd.startswith('python_'):
-                self.print(F'{cmd[4:]}', 'python')
+                self._python(cmd[7:])
             else:
                 self.print(subprocess.run(cmd[4:], timeout=100, shell=True, stdout=subprocess.PIPE).stdout, 'system')
         elif key == '返回':
@@ -102,6 +103,12 @@ class Entry(Thread):
             self.reflash_list()
         elif key == '結束':
             self.root.destroy()
+
+    def _python(self, arg):
+        self.print(F'run {arg}', 'menu')
+        self.subpid.append(subprocess.Popen(F'python {PATH+arg}', shell=True))
+        self.print(self.subpid[-1].poll())
+        print(PATH+arg)
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
         self._pi = pigpio.pi()
@@ -139,10 +146,15 @@ class Entry(Thread):
         self.display_log = Listbox(self.root)
         self.display_log.config(bd=0, bg='#1C2312', fg='#A9B4C2', selectbackground='#7D98A1', selectforeground='#393E46', font=TkFont.Font(family="Helvetica", size=20))
         self.display_log.place(relheight=0.32, relwidth=1, relx=0, rely=0.68)
+        self.create_menu()
 
     def create_menu(self):
         with open(PATH+'menu.json', encoding='utf-8') as f:
-            menu = json.load(f.read())  
+            menu = json.load(f)
+        os.chdir(PATH)
+        for fname in os.listdir():
+            if '.py' in fname:
+                menu["程式相關"]["執行其他程式"][fname] = F"python_{fname}"
         self.change_menu(menu)
 
     def change_menu(self, dist):
@@ -217,7 +229,7 @@ class Entry(Thread):
         self.reflash_list()
 
     def print(self, text='', name='unknow'):
-        msg = F'[{F"{name:7}"[:7]}]' + text
+        msg = F'[{F"{name:7}"[:7]}]' + text.__str__()
         self.display_log.insert(END, msg)
         if self.display_log.size() > 3:
             self.display_log.delete(0)

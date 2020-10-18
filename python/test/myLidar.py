@@ -8,6 +8,11 @@ import threading
 
 PATH = '/'.join(__file__.split('/')[:-1])
 
+FRONT = 90
+BEHIND = 270
+SIDE = 0
+midRange = [-2, -1, 0, 1, 2]
+
 #TODO: 急速模式
 @only
 class MyLidar(Thread):
@@ -24,6 +29,25 @@ class MyLidar(Thread):
         self.tmp = []
         self.stop = 0
         self.ready = 0
+        self.mid = []
+
+    def front(self):
+        pass
+
+    def behind(self):
+        pass
+
+    def side(self):
+        pass
+
+    def update(self):
+        pass
+
+    def detect(self):
+        # find edge
+        base = self.data[FRONT]
+        gap = 0.1*base
+        while 
 
     def connect(self, force=0):
         if force:

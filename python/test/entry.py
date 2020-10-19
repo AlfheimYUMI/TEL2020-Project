@@ -99,7 +99,7 @@ class Entry(Thread):
             elif cmd.startswith('kill_'):
                 self._kill(cmd[5:])
             else:
-                self.print(subprocess.run(cmd[4:], timeout=100, shell=True, stdout=subprocess.PIPE).stdout, 'system')
+                self.print(subprocess.check_output(cmd, timeout=100, shell=True), 'system')
             self.path.pop()
             self.reflash_list()
         elif key == '返回':

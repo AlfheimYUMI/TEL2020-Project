@@ -5,7 +5,7 @@ try:
     debug = 0
 except ImportError:
     # print('Warning: pigio is NOT imported')
-    debug = 0
+    debug = 1
     import mpigpio as pigpio
 
 HOST ='127.0.0.1'# 伺服器的主機名或者 IP 地址

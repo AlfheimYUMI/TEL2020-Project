@@ -134,10 +134,11 @@ class MyLidar(Thread):
 if __name__ == "__main__":
     lidar = MyLidar()
     lidar.connect()
-    lidar.start()
-    while 1:
-        if input('>>>'):
-            lidar.save_date()
-        else:
-            break
-    lidar.exit()
+    lidar.run()
+    # lidar.start()
+    # while 1:
+    #     if input('>>>'):
+    #         lidar.save_date()
+    #     else:
+    #         break
+    # lidar.exit()

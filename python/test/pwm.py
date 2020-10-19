@@ -8,5 +8,8 @@ except ImportError:
     import mpigpio as pigpio
 pwmpin = 12
 pi = pigpio.pi()
-pi.set_PWM_range(pwmpin, 9999)
-pi.set_PWM_dutycycle(pwmpin, 50)
+for i in range(10):
+    pi.hardware_PWM(12, 1000, 100000*(i+1))
+    time.sleep(2)
+# pi.set_PWM_range(pwmpin, 9999)
+# pi.set_PWM_dutycycle(pwmpin, 50)

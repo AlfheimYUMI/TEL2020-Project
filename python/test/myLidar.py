@@ -43,7 +43,7 @@ class MyLidar(Thread):
         self._pi = get_only(pigpio.pi)
         self.speed = 0
         self.iterm = 0
-        self.output = 0
+        self.output = 500000
         # self._pi.set_PWM_range(pwmpin, 9999)
 
     def pwm(self, target=360):
@@ -86,6 +86,7 @@ class MyLidar(Thread):
         self.ready = 0
         
     def run(self):
+        ret = self._pi.hardware_PWM(12, 1000, self.output)
         while not self.stop:
             if self.scan:
                 self.recive()

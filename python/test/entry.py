@@ -17,7 +17,8 @@ except ImportError:
     debug = 1
     import mpigpio as pigpio
 
-PATH = '/'.join(__file__.split('/')[:-1])+'/'
+PATH = '/'.join(__file__.split('/')[:-1]) + '/'
+pycmd = 'python' if debug else 'python3'
 
 class SOC(Thread):
     def __init__(self, output, host='127.0.0.1', port=12300):
@@ -110,7 +111,7 @@ class Entry(Thread):
 
     def _python(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen(F'python3 {PATH+arg}', shell=True)
+        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)

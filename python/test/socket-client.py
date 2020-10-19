@@ -9,6 +9,6 @@ for i in range(100):
     time.sleep(1)
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.connect((HOST, PORT))
-        s.sendall(bytes(F'test[{i}],client1234', 'utf-8'))
+        s.sendall(bytes(F'test[{i}],client', 'utf-8'))
 end = time.time()
 print(F'{start}->{end}:  {end-start}')

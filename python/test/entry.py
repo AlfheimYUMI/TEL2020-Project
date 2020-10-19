@@ -110,16 +110,16 @@ class Entry(Thread):
 
     def _python(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen(F'python {PATH+arg}', shell=True)
+        process = subprocess.Popen(F'python3 {PATH+arg}', shell=True)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
-        # self.print(self.subpid[-1].poll())
+        self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)
         
     def _kill(self, name):
         for index, pid in enumerate(self.subpid):
             if pid.name == name:
                 pid.process.kill()
-                self.print(self.subpid.pop(index).name, 'process')
+                self.print(self.subpid.pop(index).name, 'kill')
                 break
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):

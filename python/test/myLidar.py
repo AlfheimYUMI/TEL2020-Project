@@ -94,6 +94,7 @@ class MyLidar(Thread):
                 self.recive()
             else:
                 sleep(0.2)
+        send(F'dead', 'lidar')
         self.lidar.stop_motor()
 
     def recive(self):

@@ -89,6 +89,7 @@ class MyLidar(Thread):
     def run(self):
         send('run', 'lidar')
         while not self.stop:
+            send(F'live', 'lidar')
             if self.scan:
                 self.recive()
             else:

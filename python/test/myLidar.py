@@ -72,6 +72,7 @@ class MyLidar(Thread):
         gap = 0.1*base
 
     def connect(self, force=0):
+        ret = self._pi.hardware_PWM(12, 1000, self.output)
         if force:
             self.ready = 0
         ports = serial_ports()
@@ -86,7 +87,7 @@ class MyLidar(Thread):
         self.ready = 0
         
     def run(self):
-        ret = self._pi.hardware_PWM(12, 1000, self.output)
+        send('run', 'lidar')
         while not self.stop:
             if self.scan:
                 self.recive()
@@ -113,7 +114,7 @@ class MyLidar(Thread):
                 self.tmp = []
                 self.pwm()
                 print('new data')
-                send(F'new data, s:{self.speed}')
+                send(F'new data s:{self.speed},lidar')
 
     def getData(self, deg=0):
         self.threadLock.acquire()
@@ -131,7 +132,6 @@ class MyLidar(Thread):
         self.stop = 1
 
 if __name__ == "__main__":
-    send(123456)
     lidar = MyLidar()
     lidar.connect()
     lidar.start()

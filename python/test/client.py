@@ -2,7 +2,7 @@ import socket
 import time
 try:
     import pigpio
-    debug = 1
+    debug = 0
 except ImportError:
     # print('Warning: pigio is NOT imported')
     debug = 1

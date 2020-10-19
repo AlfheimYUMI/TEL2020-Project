@@ -26,6 +26,8 @@ class pi():
         return
     def set_noise_filter(self, *args):
         return
+    def hardware_PWM(self, *args):
+        return
 
 def pulse(*args):
     return

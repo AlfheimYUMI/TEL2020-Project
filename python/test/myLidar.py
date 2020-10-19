@@ -114,7 +114,7 @@ class MyLidar(Thread):
                 self.tmp = []
                 self.pwm()
                 print('new data')
-                send(F'new data s:{self.speed},lidar')
+                send(F'new data s:{self.speed}', 'lidar')
 
     def getData(self, deg=0):
         self.threadLock.acquire()

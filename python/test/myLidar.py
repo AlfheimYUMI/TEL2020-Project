@@ -2,9 +2,16 @@ from mrplidar import RPLidar
 from serialport import serial_ports
 from threading import Thread
 from time import sleep, time
-from tool import only
-
+from tool import *
+from client import send
 import threading
+try:
+    import pigpio
+    debug = 0
+except ImportError:
+    print('Warning: pigio is NOT imported')
+    debug = 1
+    import mpigpio as pigpio
 
 PATH = '/'.join(__file__.split('/')[:-1])
 
@@ -13,15 +20,17 @@ BEHIND = 270
 SIDE = 0
 midRange = [-2, -1, 0, 1, 2]
 
+
 #TODO: 急速模式
 @only
 class MyLidar(Thread):
 
-    def __init__(self):
+    def __init__(self, print=print):
+        self.print = print
         Thread.__init__(self)
         self.lidar = RPLidar()
-        self.data = [0] * 360
-        self.qualit = [0] * 360
+        self.data = [0] * 362
+        self.qualit = [0] * 362
         self.scan = True
         self.threadLock = threading.Lock()
         self.daemon = 1
@@ -29,7 +38,18 @@ class MyLidar(Thread):
         self.tmp = []
         self.stop = 0
         self.ready = 0
-        self.mid = []
+        self._pi = get_only(pigpio.pi)
+        self.speed = 0
+        self.iterm = 0
+        self.output = 0
+        # self._pi.set_PWM_range(pwmpin, 9999)
+
+    def pwm(self, target=360):
+        error = target - self.speed
+        self.iterm += error * ki
+        self.output = error * kp + self.iterm
+        self.output = min(max(9999, self.output), 0)
+        self._pi.set_PWM_dutycycle(pwmpin, self.output)
 
     def front(self):
         pass
@@ -47,7 +67,6 @@ class MyLidar(Thread):
         # find edge
         base = self.data[FRONT]
         gap = 0.1*base
-        while 
 
     def connect(self, force=0):
         if force:
@@ -62,9 +81,6 @@ class MyLidar(Thread):
     def disconnect(self):
         self.lidar.disconnect()
         self.ready = 0
-
-    def pwm(self, pwm=511):
-        self.lidar.set_pwm(pwm)
         
     def run(self):
         while not self.stop:
@@ -81,13 +97,19 @@ class MyLidar(Thread):
             new_scan, qualit, angle, distance = measurment
             self.tmp.append(measurment)
             self.threadLock.acquire()
-            self.data[int(angle)] = distance
-            self.qualit[int(angle)] = qualit
+            try:
+                self.data[int(angle)] = distance
+                self.qualit[int(angle)] = qualit
+            except:
+                print(angle)
             self.threadLock.release()
             if new_scan:
                 self.realData = self.tmp
+                self.speed = len(self.realData)
                 self.tmp = []
+                # self.pwm()
                 print('new data')
+                send(F'new data, s:{self.speed}')
 
     def getData(self, deg=0):
         self.threadLock.acquire()
@@ -105,6 +127,7 @@ class MyLidar(Thread):
         self.stop = 1
 
 if __name__ == "__main__":
+    send(123456)
     lidar = MyLidar()
     lidar.connect()
     lidar.start()

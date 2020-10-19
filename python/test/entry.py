@@ -96,8 +96,12 @@ class Entry(Thread):
                 self.print(F'run {cmd[4:]}', 'run')
             elif cmd.startswith('python_'):
                 self._python(cmd[7:])
+            elif cmd.startswith('kill_'):
+                self._kill(cmd[5:])
             else:
                 self.print(subprocess.run(cmd[4:], timeout=100, shell=True, stdout=subprocess.PIPE).stdout, 'system')
+            self.path.pop()
+            self.reflash_list()
         elif key == '返回':
             self.path.pop()
             self.reflash_list()
@@ -106,9 +110,17 @@ class Entry(Thread):
 
     def _python(self, arg):
         self.print(F'run {arg}', 'menu')
-        self.subpid.append(subprocess.Popen(F'python {PATH+arg}', shell=True))
-        self.print(self.subpid[-1].poll())
-        print(PATH+arg)
+        process = subprocess.Popen(F'python {PATH+arg}', shell=True)
+        self.subpid.append(types.SimpleNamespace(name=arg, process=process))
+        # self.print(self.subpid[-1].poll())
+        print(PATH + arg)
+        
+    def _kill(self, name):
+        for index, pid in enumerate(self.subpid):
+            if pid.name == name:
+                pid.process.kill()
+                self.print(self.subpid.pop(index).name, 'process')
+                break
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
         self._pi = pigpio.pi()
@@ -146,19 +158,26 @@ class Entry(Thread):
         self.display_log = Listbox(self.root)
         self.display_log.config(bd=0, bg='#1C2312', fg='#A9B4C2', selectbackground='#7D98A1', selectforeground='#393E46', font=TkFont.Font(family="Helvetica", size=20))
         self.display_log.place(relheight=0.32, relwidth=1, relx=0, rely=0.68)
-        self.create_menu()
+        self.load_menu()
 
-    def create_menu(self):
+    def load_menu(self):
         with open(PATH+'menu.json', encoding='utf-8') as f:
-            menu = json.load(f)
+            self.menu = json.load(f)
+        self.change_menu()
+
+    def load_python(self):
+        self.menu["程式相關"]["執行其他程式"] = {"返回": None}
         os.chdir(PATH)
         for fname in os.listdir():
             if '.py' in fname:
-                menu["程式相關"]["執行其他程式"][fname] = F"python_{fname}"
-        self.change_menu(menu)
+                self.menu["程式相關"]["執行其他程式"][fname] = F"python_{fname}"
 
-    def change_menu(self, dist):
-        self.menu = dist
+    def load_process(self):
+        self.menu["程式相關"]["執行中程式"] = {"返回": None}
+        for pid in self.subpid:
+            self.menu["程式相關"]["執行中程式"][pid.name] = F"kill_{pid.name}"
+
+    def change_menu(self):
         self.path = []
         self.tmplist = []
         self.point = 0
@@ -208,6 +227,10 @@ class Entry(Thread):
         target = list(self.tmplist.keys())[self.point + self.cursor]
         if isinstance(self.tmplist[target], dict):
             self.path.append(target)
+            if target == '執行中程式':
+                self.load_process()
+            if target == '執行其他程式':
+                self.load_python()
             self.reflash_list()
         else:
             self.dealt(self.tmplist[target], target)

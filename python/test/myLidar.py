@@ -35,21 +35,21 @@ class MyLidar(Thread):
         self.qualit = [0] * 362
         self.scan = True
         self.threadLock = threading.Lock()
-        self.daemon = 1
+        self.daemon = 1  
         self.realData = []
         self.tmp = []
         self.stop = 0
         self.ready = 0
         self._pi = get_only(pigpio.pi)
         self.speed = 0
-        self.iterm = 0
-        self.output = 500000
+        self.iterm = 1000000
+        self.output = 0
         # self._pi.set_PWM_range(pwmpin, 9999)
 
     def pwm(self, target=360):
         error = target - self.speed
         self.iterm += error * ki
-        self.output = error * kp + self.iterm
+        # self.output = error * kp + self.iterm
         self.output = min(max(1000000, self.output), 0)
         ret = self._pi.hardware_PWM(12, 1000, self.output)
 

@@ -14,6 +14,8 @@ except ImportError:
     import mpigpio as pigpio
 
 PATH = '/'.join(__file__.split('/')[:-1])
+ki = 10
+kp = 1000
 
 FRONT = 90
 BEHIND = 270
@@ -48,8 +50,9 @@ class MyLidar(Thread):
         error = target - self.speed
         self.iterm += error * ki
         self.output = error * kp + self.iterm
-        self.output = min(max(9999, self.output), 0)
-        self._pi.set_PWM_dutycycle(pwmpin, self.output)
+        self.output = min(max(1000000, self.output), 0)
+        ret = self._pi.hardware_PWM(12, 1000, self.output)
+
 
     def front(self):
         pass
@@ -107,7 +110,7 @@ class MyLidar(Thread):
                 self.realData = self.tmp
                 self.speed = len(self.realData)
                 self.tmp = []
-                # self.pwm()
+                self.pwm()
                 print('new data')
                 send(F'new data, s:{self.speed}')
 

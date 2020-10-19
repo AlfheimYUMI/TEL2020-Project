@@ -53,7 +53,6 @@ class MyLidar(Thread):
         self.output = max(min(1000000, self.output), 0)
         ret = self._pi.hardware_PWM(12, 1000, self.output)
 
-
     def front(self):
         pass
 

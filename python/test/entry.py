@@ -10,14 +10,16 @@ import socket
 import types
 import json
 import os
+import sys
 try:
     import pigpio
     debug = 0
 except ImportError:
     print('Warning: pigio is NOT imported')
-    debug = 1
     import mpigpio as pigpio
+    debug = 1
 
+fullscreen = 1 if '-f' in sys.argv else 0
 PATH = '/'.join(__file__.split('/')[:-1])
 PATH += '/' if PATH else './'
 pycmd = 'python' if debug else 'python3'
@@ -165,10 +167,10 @@ class Entry(Thread):
     def createWindows(self):
         self.root = Tk()
         self.root.title("樹莓派執行介面")
-        if debug:
-            self.root.geometry('480x320')
-        else:
+        if fullscreen:
             self.root.attributes("-fullscreen", True)
+        else:
+            self.root.geometry('480x320')
         self.root.config(bg='#000000')
         self.status_label = Label(self.root, text='init')
         self.status_label.place(relheight=0.1, relwidth=1, relx=0, rely=0)
@@ -224,10 +226,9 @@ class Entry(Thread):
 
     def run(self):
         self.createWindows()
-        self.soc = SOC(self.print)
-        self.soc.start()
+        # self.soc = SOC(self.print)
+        # self.soc.start()
         self.root.mainloop()
-
 
     def down(self, *arg):
         if self.cursor < 4:

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from mrplidar import RPLidar
 from serialport import serial_ports
 from threading import Thread

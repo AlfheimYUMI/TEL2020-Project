@@ -66,7 +66,6 @@ class SOC(Thread):
             self.sel.unregister(sock)
             sock.close()
 
-
 @only
 class Entry(Thread):
     def __init__(self):
@@ -88,6 +87,7 @@ class Entry(Thread):
         }
         self.subpid = []
         self.pinInit()
+        self.stop = 0
 
     def dealt(self, cmd, key):
         if isinstance(cmd, str):
@@ -107,11 +107,12 @@ class Entry(Thread):
             self.path.pop()
             self.reflash_list()
         elif key == '結束':
+            self.stop = 1
             self.root.destroy()
 
     def _python(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False)
+        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)
@@ -122,6 +123,14 @@ class Entry(Thread):
                 pid.process.kill()
                 self.print(self.subpid.pop(index).name, 'kill')
                 break
+
+    def communicate(self):
+        for pid in self.subpid:
+            try:
+                line = pid.process.stdout.readline().decode('utf-8')
+                self.print(line, pid.name)
+            except:
+                pass
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
         self._pi = pigpio.pi()
@@ -260,7 +269,10 @@ class Entry(Thread):
 
 app = Entry()
 if not debug:
-    app.run()
+    app.start()
+    while not app.stop:
+        app.communicate()
+        sleep(0.01)
 else:
     app.start()
     while 1:

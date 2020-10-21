@@ -25,6 +25,7 @@ if __name__ == "__main__":
     for i in range(100):
         time.sleep(1)
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            print(F'send{i}')
             s.connect((HOST, PORT))
             s.sendall(bytes(F'test[{i}],client', 'utf-8'))
     end = time.time()

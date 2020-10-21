@@ -18,7 +18,8 @@ except ImportError:
     debug = 1
     import mpigpio as pigpio
 
-PATH = '/'.join(__file__.split('/')[:-1]) + '/'
+PATH = '/'.join(__file__.split('/')[:-1])
+PATH += '/' if PATH else './'
 pycmd = 'python' if debug else 'python3'
 
 class SOC(Thread):

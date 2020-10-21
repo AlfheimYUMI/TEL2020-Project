@@ -1,7 +1,7 @@
 {
     "執行主程式": {
         "返回": null,
-        "自動": "run_auto",
+        "自動": ["run_~/Desktop/stream.sh"],
         "手動": "run_remote"
     },
     "更新資料": "~/Desktop/pull.sh",

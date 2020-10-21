@@ -111,9 +111,18 @@ class Entry(Thread):
         elif key == '結束':
             self.stop = 1
             self.root.destroy()
+        if isinstance(cmd, list):
+            for subcmd in cmd:
+                self.dealt(subcmd, '')
+
+    def _run(self, arg):
+        self.print(F'run {arg}', 'menu')
+        process = subprocess.Popen(arg.split(), shell=False, stdout=subprocess.PIPE)
+        self.subpid.append(types.SimpleNamespace(name=arg.split('/')[-1], process=process))
+        self.print(self.subpid[-1].process.poll(), 'shell')
 
     def _python(self, arg):
-        self.print(F'run {arg}', 'menu')
+        self.print(F'pyt {arg}', 'menu')
         process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')

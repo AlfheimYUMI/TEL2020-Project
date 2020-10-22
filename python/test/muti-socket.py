@@ -30,7 +30,7 @@ def service_connection(key, mask):
         # for recv_a in recv_data:
         if recv_data:
             data.inb = recv_data
-            # print(data.inb.split(b','))
+            print(data.inb.decode('utf-8'))
     else:
         # print('closing connection to', data.addr)
         sel.unregister(sock)

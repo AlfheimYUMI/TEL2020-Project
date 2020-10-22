@@ -19,6 +19,13 @@ def get_only(cls, *args, **kw):
         instances[cls.__name__] = cls(*args, **kw)
     return instances[cls.__name__]
 
+def get_var(name):
+    '''if exist get the one'''
+    global instances
+    if name not in instances:
+        instances[name] = None
+    return instances[name]
+
 def display(*arg, **kwargs):
     print(F'{__name__:15}:', end='')
     print(*arg, **kwargs)

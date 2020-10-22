@@ -8,6 +8,7 @@ except ImportError:
     # print('Warning: pigio is NOT imported')
     debug = 1
     import mpigpio as pigpio
+from time import sleep
 
 HOST ='127.0.0.1'# 伺服器的主機名或者 IP 地址
 
@@ -23,11 +24,16 @@ def send(text, name='unknow'):
 
 if __name__ == "__main__":
     start = time.time()
-    for i in range(100):
-        time.sleep(1)
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            print(F'send{i}')
-            s.connect((HOST, PORT))
-            s.sendall(bytes(F'test[{i}],client', 'utf-8'))
+    try:
+        for i in range(100):
+            time.sleep(1)
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                print(F'send{i}')
+                s.connect((HOST, PORT))
+                s.sendall(bytes(F'test[{i}],client', 'utf-8'))
+                sleep(1000)
+                s.sendall(bytes(F'test[{i}],client', 'utf-8'))
+    except:
+        pass
     end = time.time()
     print(F'{start}->{end}:  {end-start}')

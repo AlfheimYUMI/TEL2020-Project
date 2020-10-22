@@ -24,7 +24,7 @@ class Micon(Thread):
                         self.ready = 1
                         break
                     self.ser.flushInput()
-                    self.ser.write(b'z\xff\xff\xff')
+                    self.ser.write(b'[z]')
                     ret = self.ser.readline()
                     if 'OK' in ret:
                         self.ready = 1
@@ -40,20 +40,15 @@ class Micon(Thread):
                     print(read)
                 sleep(0.1)
 
-    def sand(self, cmd='z', vals=[], end=b'\x00\xff\xff\xff'):
-        tmp = []
-        for val in vals:
-            if val<0:
-                val = -val
-                tmp.append(256-(val%256))
-                tmp.append(255-(val//256))
-            else:
-                tmp.append(val%256)
-                tmp.append(val//256)
-        text = bytes(cmd, 'ascii')+bytes(tmp)+end
+    def sand(self, cmd='z', vals=[], start='[', split=',', end=']'):
+        cmds = [cmd] + vals
+        text = start+split.join(cmds)+end
         print("text = ", text)
         if self.ser:
-            self.ser.write(text)
+            self.ser.write(bytes(text, 'ascii'))
+
+    def dealt(self):
+        pass
 
 if __name__ == "__main__":
     micon = Micon()

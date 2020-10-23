@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from threading import Thread
 from time import time, sleep
+from micon import Micon
 import selectors
 import socket
 import types
@@ -8,6 +9,8 @@ import types
 status = {}
 last = time()
 timeout = 0.5
+speed = 800
+rotationRatio = 0.2
 
 class SOC(Thread):
     def __init__(self, output, host='127.0.0.1', port=12301):
@@ -62,20 +65,36 @@ def dealt(cmd):
         return
     global status
     status[cmd[2:]] = 1 if cmd.startswith('D_') else 0
-    print(cmd)
-    print(status)
-    # if status[]
+    # print(cmd)
+    # print(status)
+    move = 1 if status.get('w') else (-1 if status.get('s') else 0)
+    dire = 1 if status.get('d') else (-1 if status.get('a') else 0)
+    
+    speedL = 0
+    speedR = 0
+    if move:
+        speedL = speed*move
+        speedR = speed*move
+        if dire:
+            speedL += rotationRatio*speed*dire*move
+            speedR -= rotationRatio*speed*dire*move
+    else:
+        if dire:
+            speedL = -speed*dire
+            speedR = speed*dire
+    print(F'{speedL:5}{speedR:5}')
+    return 'v', speedL, speedR
 
 if __name__ == "__main__":
-    s = SOC(dealt)
+    micon = Micon()
+    # micon.connect(force=1)
+    micon.start()
+    s = SOC(lambda cmd: micon.dealt(dealt(cmd)))
     s.start()
     while 1:
         if time()-last > timeout:
             last = time()
-            # print('soc timeout')
-            # stop
         else:
-            
             sleep(0.1)
         pass
     pass

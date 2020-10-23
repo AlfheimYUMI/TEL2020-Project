@@ -12,12 +12,16 @@ class Micon(Thread):
         self.ready = 0
         self.stop = 0
         self.daemon = 1
+
+    def __exit__(self, type, value, traceback):
+        if self.ready:
+            self.ser.close()
     
     def connect(self, name='', force = 0):
         if force:
             self.ready = 0
         while not self.ready:
-            for port in serial_ports('USB'):
+            for port in serial_ports(name):
                 try:
                     self.ser = serial.Serial(port, 9600, timeout=100)
                     if force:
@@ -38,7 +42,14 @@ class Micon(Thread):
                 read = self.ser.read_all()
                 if read:
                     print(read)
-                sleep(0.1)
+                sleep(0.2)
+                self.ser.write('[ ]')
+
+    def dealt(self, itera):
+        if itera:
+            cmd = str(itera[0])
+            vals = list(map(str, itera[1:]))
+            self.sand(cmd, vals)
 
     def sand(self, cmd='z', vals=[], start='[', split=',', end=']'):
         cmds = [cmd] + vals
@@ -46,9 +57,6 @@ class Micon(Thread):
         print("text = ", text)
         if self.ser:
             self.ser.write(bytes(text, 'ascii'))
-
-    def dealt(self):
-        pass
 
 if __name__ == "__main__":
     micon = Micon()

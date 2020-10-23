@@ -146,7 +146,7 @@ class Entry(Thread):
                 pass
 
     def pinInit(self, pin_home=26, pin_up=19, pin_down=13, pin_check=6):
-        self._pi = pigpio.pi()
+        self._pi = get_only(pigpio.pi)
         self._pi.set_mode(pin_home, pigpio.INPUT)
         self._pi.set_mode(pin_up, pigpio.INPUT)
         self._pi.set_mode(pin_down, pigpio.INPUT)

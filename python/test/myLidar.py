@@ -69,6 +69,15 @@ class MyLidar(Thread):
         # find edge
         base = self.data[FRONT]
         gap = 0.1*base
+    
+    def get_angle(self, center: int = 90, theta: int = 3):
+        # print(center)
+        d1 = sum(self.data[center + theta - 1:center + theta + 2]) / 3
+        d2 = sum(self.data[center - theta - 1:center - theta + 2]) / 3
+
+        angle = (d1 - d2) / max(d1, d2, 0.0001)
+
+        return angle  # (distance, sin(angle))
 
     def connect(self, force=0):
         ret = self._pi.hardware_PWM(12, 1000, self.output)
@@ -134,11 +143,9 @@ class MyLidar(Thread):
 if __name__ == "__main__":
     lidar = MyLidar()
     lidar.connect()
-    lidar.run()
-    # lidar.start()
-    # while 1:
-    #     if input('>>>'):
-    #         lidar.save_date()
-    #     else:
-    #         break
-    # lidar.exit()
+    # lidar.run()
+    lidar.start()
+    for i in range(100):
+        print(lidar.get_angle())
+        sleep(0.5)
+    lidar.exit()

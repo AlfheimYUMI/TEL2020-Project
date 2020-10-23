@@ -129,7 +129,7 @@ class Entry(Thread):
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)
-        
+
     def _kill(self, name):
         for index, pid in enumerate(self.subpid):
             if pid.name == name:
@@ -215,7 +215,7 @@ class Entry(Thread):
         self.length = self.tmplist.__len__()
         self.status_label.config(text=self.path[-1] if self.path else 'MENU')
         self.update()
-    
+
     def update(self):
         self.display_list.delete(0, END)
         for i in range(5):

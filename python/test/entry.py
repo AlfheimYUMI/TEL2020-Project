@@ -141,7 +141,8 @@ class Entry(Thread):
         for pid in self.subpid:
             try:
                 line = pid.process.stdout.readline().decode('utf-8')
-                self.print(line, pid.name)
+                if line:
+                    self.print(line, pid.name)
             except:
                 pass
 

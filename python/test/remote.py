@@ -87,9 +87,9 @@ def dealt(cmd):
 
 if __name__ == "__main__":
     micon = Micon()
-    # micon.connect(force=1)
+    micon.connect(force=1)
     micon.start()
-    s = SOC(lambda cmd: micon.dealt(dealt(cmd)))
+    s = SOC(lambda cmd: micon.dealt(dealt(cmd)), host='192.168.0.112')
     s.start()
     while 1:
         if time()-last > timeout:

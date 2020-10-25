@@ -131,8 +131,11 @@ void reciveComplete()
     case 'A':
         cmd_A();
         break;
-    case 'p':
+    case 'P':
         cmd_P();
+        break;
+    case 'T':
+        cmd_T();
         break;
     default:
         break;
@@ -162,12 +165,24 @@ void cmd_S()
     motor_BL.setAcceleration(value[1] * mm2step * mm2step);
 }
 
+void cmd_T()
+{
+    motor_TR.setSpeed(1000);
+    motor_TL.setSpeed(1000);
+    motor_BR.setSpeed(1000);
+    motor_BL.setSpeed(1000);
+}
+
 void cmd_V()
 {
+//    motor_TR.setSpeed(value[0] * mm2step);
+//    motor_TL.setSpeed(value[1] * mm2step);
+//    motor_BR.setSpeed(value[0] * mm2step);
+//    motor_BL.setSpeed(value[1] * mm2step);
     motor_TR.setSpeed(value[0] * mm2step);
-    motor_TL.setSpeed(value[2] * mm2step);
-    motor_BR.setSpeed(value[1] * mm2step);
-    motor_BL.setSpeed(value[3] * mm2step);
+    motor_TL.setSpeed(value[1] * mm2step);
+    motor_BR.setSpeed(value[0] * mm2step);
+    motor_BL.setSpeed(value[1] * mm2step);
 }
 
 void cmd_M()

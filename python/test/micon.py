@@ -43,7 +43,7 @@ class Micon(Thread):
                 if read:
                     print(read)
                 sleep(0.2)
-                self.ser.write('[ ]')
+                self.dealt((' '))
 
     def dealt(self, itera):
         if itera:
@@ -63,9 +63,6 @@ if __name__ == "__main__":
     micon.connect(force=1)
     micon.start()
     val = 0
-    while 1:
-        inn = input('<<<')
-        if not inn:
-            break
-        val = int(inn)
-        micon.sand('V', [val]*4)
+    for i in range(5):
+        sleep(1)
+        micon.dealt(('V', 1000-i*100, 1000-i*100))

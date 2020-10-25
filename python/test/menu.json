@@ -3,7 +3,7 @@
         "返回": null,
         "自動": ["run_~/Desktop/stream.sh"],
         "手動": "run_remote",
-        "啟動相機": ["run_~/Desktop/stream.sh"],
+        "啟動相機": ["run_/home/pi/Desktop/stream.sh"],
         "關閉相機": null
     },
     "更新資料": "~/Desktop/pull.sh",

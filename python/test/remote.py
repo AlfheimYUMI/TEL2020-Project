@@ -83,7 +83,7 @@ def dealt(cmd):
             speedL = -speed*dire
             speedR = speed*dire
     print(F'{speedL:5}{speedR:5}')
-    return 'v', speedL, speedR
+    return 'V', speedL, speedR
 
 if __name__ == "__main__":
     micon = Micon()

@@ -98,7 +98,7 @@ class Entry(Thread):
             if cmd.startswith('fun_'):
                 self.print(F'fun {cmd[4:]}', 'fun')
             elif cmd.startswith('run_'):
-                self.print(F'run {cmd[4:]}', 'run')
+                self._run(cmd[4:])
             elif cmd.startswith('python_'):
                 self._python(cmd[7:])
             elif cmd.startswith('kill_'):
@@ -121,7 +121,7 @@ class Entry(Thread):
 
     def _run(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen(arg.split(), shell=True, stdout=subprocess.PIPE)
+        process = subprocess.Popen(arg.split(), shell=False, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg.split('/')[-1], process=process))
         self.print(self.subpid[-1].process.poll(), 'shell')
 

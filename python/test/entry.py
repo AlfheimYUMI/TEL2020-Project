@@ -117,15 +117,17 @@ class Entry(Thread):
             for subcmd in cmd:
                 self.dealt(subcmd, '')
 
+    
+
     def _run(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen(arg.split(), shell=False, stdout=subprocess.PIPE)
+        process = subprocess.Popen(arg.split(), shell=True, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg.split('/')[-1], process=process))
         self.print(self.subpid[-1].process.poll(), 'shell')
 
     def _python(self, arg):
         self.print(F'pyt {arg}', 'menu')
-        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE)
+        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE, stderr=stdout)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)

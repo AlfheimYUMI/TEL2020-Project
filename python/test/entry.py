@@ -121,7 +121,7 @@ class Entry(Thread):
 
     def _run(self, arg):
         self.print(F'run {arg}', 'menu')
-        process = subprocess.Popen(arg.split(), shell=False, stdout=subprocess.PIPE)
+        process = subprocess.Popen(['bash', arg], shell=False, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg.split('/')[-1], process=process))
         self.print(self.subpid[-1].process.poll(), 'shell')
 

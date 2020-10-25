@@ -13,16 +13,23 @@ speed = 800
 rotationRatio = 0.2
 
 class SOC(Thread):
-    def __init__(self, output, host='192.168.0.116', port=12301):
+    def __init__(self, output, host='192.168.0.116', port=12300):
         Thread.__init__(self)
         lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        lsock.bind((host, port))
+        # lsock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        for i in range(100):
+            try:
+                print(F'try {port+i}')
+                lsock.bind((host, port + i))
+                print(F'on{host}:{port+i}')
+                break
+            except:
+                pass
         lsock.listen()
         lsock.setblocking(False)
         self.sel = selectors.DefaultSelector()
         self.sel.register(lsock, selectors.EVENT_READ, data=None)
         self.out = output
-        print(F'on{host}:{port}')
         self.daemon = 1
 
     def run(self):
@@ -87,9 +94,9 @@ def dealt(cmd):
 
 if __name__ == "__main__":
     micon = Micon()
-    micon.connect(force=1)
+    # micon.connect(force=1)
     micon.start()
-    s = SOC(lambda cmd: micon.dealt(dealt(cmd)), host='192.168.0.116')
+    s = SOC(lambda cmd: micon.dealt(dealt(cmd)), host='127.0.0.1')
     s.start()
     while 1:
         if time()-last > timeout:

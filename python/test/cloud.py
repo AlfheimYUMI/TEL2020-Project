@@ -31,7 +31,7 @@ from pynput import keyboard
 from time import time, sleep
 import socket
 
-HOST ='127.0.0.1'# 伺服器的主機名或者 IP 地址
+HOST ='192.168.0.112'# 伺服器的主機名或者 IP 地址
 PORT = 12301  # 伺服器使用的埠
 last = time()
 Heartbeat = 0.3  # sec

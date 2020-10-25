@@ -13,7 +13,7 @@ speed = 800
 rotationRatio = 0.2
 
 class SOC(Thread):
-    def __init__(self, output, host='127.0.0.1', port=12301):
+    def __init__(self, output, host='192.168.0.116', port=12301):
         Thread.__init__(self)
         lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         lsock.bind((host, port))

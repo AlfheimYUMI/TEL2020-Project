@@ -28,7 +28,7 @@ class Micon(Thread):
                         self.ready = 1
                         break
                     self.ser.flushInput()
-                    self.ser.write(b'[z]')
+                    self.ser.write(b'[Z]')
                     ret = self.ser.readline()
                     if 'OK' in ret:
                         self.ready = 1
@@ -43,7 +43,7 @@ class Micon(Thread):
                 if read:
                     print(read)
                 sleep(0.2)
-                self.dealt((' '))
+                # self.dealt((' '))
 
     def dealt(self, itera):
         if itera:
@@ -64,5 +64,7 @@ if __name__ == "__main__":
     micon.start()
     val = 0
     for i in range(5):
-        sleep(1)
         micon.dealt(('V', 1000-i*100, 1000-i*100))
+        sleep(2)
+
+    micon.dealt(('V', 0, 0))

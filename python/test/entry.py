@@ -125,7 +125,7 @@ class Entry(Thread):
 
     def _python(self, arg):
         self.print(F'pyt {arg}', 'menu')
-        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE, stderr=stdout)
+        process = subprocess.Popen([F'{pycmd}', F'{PATH+arg}'], shell=False, stdout=subprocess.PIPE)
         self.subpid.append(types.SimpleNamespace(name=arg, process=process))
         self.print(self.subpid[-1].process.poll(), 'python')
         print(PATH + arg)

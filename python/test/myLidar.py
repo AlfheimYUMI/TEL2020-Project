@@ -69,8 +69,8 @@ class MyLidar(Thread):
         base = self.data[FRONT]
         gap = 0.1*base
     
-    def get_angle(self, center: int = 90, theta: int = 3):
-        print(self.data)
+    def get_angle(self, center: int = 270, theta: int = 3):
+        # print(self.data)
         d1 = sum(self.data[center + theta - 1:center + theta + 2]) / 3
         d2 = sum(self.data[center - theta - 1:center - theta + 2]) / 3
 

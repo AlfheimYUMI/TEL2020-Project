@@ -89,9 +89,12 @@ class MyLidar(Thread):
             ports = serial_ports('USB')
             for port in ports:
                 print(port)
-                if self.lidar.connect(port=port):
-                    self.ready = 1
-                    break
+                try:
+                    if self.lidar.connect(port=port):
+                        self.ready = 1
+                        break
+                except:
+                    pass
 
     def disconnect(self):
         self.lidar.disconnect()

@@ -60,7 +60,8 @@ class Micon(Thread):
 
     def write(self, cmd):
         print(cmd)
-        # self.ser.write(bytes(cmd), 'ascii')
+        if self.ser:
+            self.ser.write(bytes(cmd), 'ascii')
 
 if __name__ == "__main__":
     micon = Micon()

@@ -87,10 +87,10 @@ def dealt(cmd):
 
 if __name__ == "__main__":
     micon = Micon()
-    # micon.connect(force=1)
+    micon.connect(force=1)
     micon.start()
-    # s = SOC(micon.write, host='192.168.0.116')
-    s = SOC(micon.write)
+    s = SOC(micon.write, host='192.168.43.118')
+    # s = SOC(micon.write)
     s.start()
     while 1:
         if time()-last > timeout:

@@ -17,7 +17,7 @@ class Micon(Thread):
         if self.ready:
             self.ser.close()
     
-    def connect(self, name='USB0', force = 0):
+    def connect(self, name='USB1', force = 0):
         if force:
             self.ready = 0
         while not self.ready:

@@ -105,7 +105,10 @@ class MyLidar(Thread):
         print('run', 'lidar')
         while not self.stop:
             if self.scan:
-                self.recive()
+                try:
+                    self.recive()
+                except:
+                    pass
             else:
                 sleep(0.2)
         print(F'dead', 'lidar')

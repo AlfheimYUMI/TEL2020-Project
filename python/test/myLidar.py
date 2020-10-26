@@ -72,6 +72,8 @@ class MyLidar(Thread):
     def get_angle(self, center: int = 270, theta: int = 3):
         # print(self.data)
         d1 = sum(self.data[center + theta - 1:center + theta + 2]) / 3
+        if center == 0:
+            center = 360
         d2 = sum(self.data[center - theta - 1:center - theta + 2]) / 3
 
         angle = (d1 - d2) / max(d1, d2, 0.0001)
@@ -145,6 +147,8 @@ if __name__ == "__main__":
     # lidar.run()
     lidar.start()
     for i in range(100):
-        print('a',lidar.get_angle())
+        print('F',lidar.get_angle(270))
+        print('S',lidar.get_angle(0))
+        print('B',lidar.get_angle(90))
         sleep(0.5)
     lidar.exit()

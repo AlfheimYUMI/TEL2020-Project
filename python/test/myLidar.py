@@ -87,6 +87,7 @@ class MyLidar(Thread):
             self.ready = 0
         while not self.ready:
             ports = serial_ports('USB')
+            print(ports)
             for port in ports:
                 print(port)
                 try:

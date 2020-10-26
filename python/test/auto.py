@@ -15,7 +15,8 @@ while 1:
     sleep(0.1)
     if lidar.data[270]<200:
         print('stop')
-        break
+        micon.dealt(('V', 0,0))
+        continue
     m = lidar.get_angle(270)
     if abs(m)<0.006:
         print('str')

@@ -13,7 +13,8 @@ micon.connect(force=1)
 micon.start()
 while 1:
     sleep(0.1)
-    if lidar.data[270]<200:
+    print(lidar.data[270], lidar.data[269], lidar.data[271])
+    if lidar.data[270]<20:
         print('stop')
         micon.dealt(('V', 0,0))
         continue

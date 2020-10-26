@@ -13,7 +13,7 @@ speed = 800
 rotationRatio = 0.2
 
 class SOC(Thread):
-    def __init__(self, output, host='192.168.0.116', port=12301):
+    def __init__(self, output, host='127.0.0.1', port=12301):
         Thread.__init__(self)
         lsock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         lsock.bind((host, port))
@@ -87,9 +87,10 @@ def dealt(cmd):
 
 if __name__ == "__main__":
     micon = Micon()
-    micon.connect(force=1)
+    # micon.connect(force=1)
     micon.start()
-    s = SOC(lambda cmd: micon.dealt(dealt(cmd)), host='192.168.0.116')
+    # s = SOC(micon.write, host='192.168.0.116')
+    s = SOC(micon.write)
     s.start()
     while 1:
         if time()-last > timeout:

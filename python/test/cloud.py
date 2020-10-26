@@ -1,75 +1,69 @@
 # -*- coding: utf-8 -*-
-# import socket
-# import time
-
-# HOST ='127.0.0.1'# 伺服器的主機名或者 IP 地址
-# PORT = 12300  # 伺服器使用的埠
-
-
-# def send(text, name='unknow'):
-#     print(F'{text},{name}')
-#     if not debug:
-#         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#             s.connect((HOST, PORT))
-#             s.sendall(bytes(F'{text},{name}', 'utf-8'))
-
-
-# if __name__ == "__main__":
-#     start = time.time()
-#     for i in range(100):
-#         time.sleep(1)
-#         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-#             print(F'send{i}')
-#             s.connect((HOST, PORT))
-#             s.sendall(bytes(F'test[{i}],client', 'utf-8'))
-#             sleep(1)
-#             s.sendall(bytes(F'test[{i}],client', 'utf-8'))
-#     end = time.time()
-#     print(F'{start}->{end}:  {end-start}')
-# -*- coding: utf-8 -*-
 from pynput import keyboard
 from time import time, sleep
 import socket
 
-HOST ='192.168.0.116'# 伺服器的主機名或者 IP 地址
+HOST ='127.0.0.1'# 伺服器的主機名或者 IP 地址
 PORT = 12301  # 伺服器使用的埠
 last = time()
 Heartbeat = 0.3  # sec
 stop = 0
 keys = {}
+speed = 800
+rotationRatio = 0.2
 
 
-def press(key):
-    global keys
-    if not keys.get(str(key)):
-        return bytes('', 'utf-8')
-    keys[str(key)] = 0
-    print('D', key)
-    try:
-        return bytes(F'D_{key.char}', 'utf-8')
-    except AttributeError:
-        return bytes(F'D_{key}', 'utf-8')
+class Car:
+    def __init__(self, host=HOST, port = PORT, debug=0):
+        if not debug:
+            self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.s.connect((host, port))
+        self.V = (0,0)
+        self.a = (100,0,100,0,1)
+        self.keys = {}
 
-def release(key):
-    global keys
-    keys[str(key)] = 1
-    if key == keyboard.Key.esc:
-        global stop
-        stop = 1
-    print('U', key)
-    try:
-        return bytes(F'U_{key.char}', 'utf-8')
-    except AttributeError:
-        return bytes(F'U_{key}', 'utf-8')
+    def keyDown(self, key):
+        try:
+            self.keys[key.char] = 1
+        except:
+            self.keys[key.__str__()] = 1
+        self.update()
+
+    def keyUp(self, key):
+        try:
+            self.keys[key.char] = 0
+        except:
+            self.keys[key.__str__()] = 0
+        self.update()
+
+    def update(self):
+        print(self.keys)
+        move = 1 if self.keys.get('w') else (-1 if self.keys.get('s') else 0)
+        dire = 1 if self.keys.get('d') else (-1 if self.keys.get('a') else 0)
+        
+        speedL = 0
+        speedR = 0
+        if move:
+            speedL = speed*move
+            speedR = speed*move
+            if dire:
+                speedL -= rotationRatio*speed*dire*move
+                speedR += rotationRatio*speed*dire*move
+        else:
+            if dire:
+                speedL = -speed*dire
+                speedR = speed*dire
+        self.V = (speedL, speedR)
+    
+    def send(self):
+        self.s.sendall(bytes(F"[V,{','.join(map(str,self.V))}]", 'utf-8'))
+        self.s.sendall(bytes(F"[a,{','.join(map(str,self.a))}]", 'utf-8'))
 
 if __name__ == "__main__":
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        with keyboard.Listener(
-            on_press = lambda key:s.sendall(press(key)),
-            on_release = lambda key:s.sendall(release(key))) as listener:
-            while not stop:
-                sleep(0.05)
-                if time()-last > Heartbeat:
-                    last = time()
-                    s.sendall(bytes('OK', 'utf-8'))
+    car = Car(debug=0)
+    with keyboard.Listener(
+        on_press = car.keyDown,
+        on_release = car.keyUp) as listener:
+        while not stop:
+            sleep(0.5)
+            car.send()

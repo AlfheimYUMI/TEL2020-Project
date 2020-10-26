@@ -1,9 +1,11 @@
 from myLidar import MyLidar
 from micon import Micon
 from time import sleep
+print('conn lidar')
 lidar = MyLidar()
 lidar.connect()
 lidar.start()
+print('conn micon')
 micon = Micon()
 micon.connect(force=1)
 micon.start()

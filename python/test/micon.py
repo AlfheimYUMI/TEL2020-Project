@@ -17,7 +17,7 @@ class Micon(Thread):
         if self.ready:
             self.ser.close()
     
-    def connect(self, name='', force = 0):
+    def connect(self, name='USB0', force = 0):
         if force:
             self.ready = 0
         while not self.ready:
@@ -62,7 +62,7 @@ class Micon(Thread):
         print(cmd)
         if self.ser:
             self.ser.write(bytes(cmd, 'ascii'))
-            
+
 if __name__ == "__main__":
     micon = Micon()
     micon.connect(force=1)

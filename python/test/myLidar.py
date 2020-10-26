@@ -4,6 +4,7 @@ from serialport import serial_ports
 from threading import Thread
 from time import sleep, time
 from tool import *
+from micon import Micon
 import threading
 try:
     import pigpio

@@ -65,5 +65,5 @@ if __name__ == "__main__":
         on_press = car.keyDown,
         on_release = car.keyUp) as listener:
         while not stop:
-            sleep(0.5)
+            sleep(0.1)
             car.send()

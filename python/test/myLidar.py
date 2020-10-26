@@ -170,13 +170,13 @@ if __name__ == "__main__":
         m = lidar.get_angle(270)
         if abs(m)<0.01:
             print('str')
-            micon.dealt(('V', 800,800))
+            micon.dealt(('V', 200,200))
         elif m>0:
             print('right')
-            micon.dealt(('V', 500,-500))
+            micon.dealt(('V', 100,-100))
         else:
             print('left')
-            micon.dealt(('V', -500,500))
+            micon.dealt(('V', -100,100))
     # for i in range(100):
     #     print('F',lidar.get_angle(270))
     #     print('S',lidar.get_angle(0))

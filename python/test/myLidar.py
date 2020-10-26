@@ -4,7 +4,6 @@ from serialport import serial_ports
 from threading import Thread
 from time import sleep, time
 from tool import *
-from client import send
 import threading
 try:
     import pigpio
@@ -96,13 +95,13 @@ class MyLidar(Thread):
         self.ready = 0
         
     def run(self):
-        send('run', 'lidar')
+        print('run', 'lidar')
         while not self.stop:
             if self.scan:
                 self.recive()
             else:
                 sleep(0.2)
-        send(F'dead', 'lidar')
+        print(F'dead', 'lidar')
         self.lidar.stop_motor()
 
     def recive(self):

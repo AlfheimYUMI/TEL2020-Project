@@ -84,7 +84,7 @@ class MyLidar(Thread):
         sleep(1)
         if force:
             self.ready = 0
-        ports = serial_ports()
+        ports = serial_ports('USB')
         while not self.ready:
             for port in ports:
                 if self.lidar.connect(port=port):
@@ -123,7 +123,7 @@ class MyLidar(Thread):
                 self.speed = len(self.realData)
                 self.tmp = []
                 self.pwm()
-                send(F'new data s:{self.speed}', 'lidar')
+                print('new')
 
     def getData(self, deg=0):
         self.threadLock.acquire()
@@ -146,6 +146,6 @@ if __name__ == "__main__":
     # lidar.run()
     lidar.start()
     for i in range(100):
-        print(lidar.get_angle())
+        print('a',lidar.get_angle())
         sleep(0.5)
     lidar.exit()

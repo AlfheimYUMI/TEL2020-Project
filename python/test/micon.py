@@ -23,7 +23,7 @@ class Micon(Thread):
         while not self.ready:
             for port in serial_ports(name):
                 try:
-                    self.ser = serial.Serial(port, 115200, timeout=100)
+                    self.ser = serial.Serial(port, 115200)
                     if force:
                         self.ready = 1
                         break

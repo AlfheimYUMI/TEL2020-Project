@@ -81,10 +81,11 @@ class Car:
             return F"[V,{','.join(map(str,self.V))}]"+F"[a,{','.join(map(str,self.a))}]"
 
 if __name__ == "__main__":
-    debug = 1
-    micon = Micon()
-    micon.connect(force=1)
-    micon.start()
+    debug = 0
+    if debug:
+        micon = Micon()
+        micon.connect(force=1)
+        micon.start()
     car = Car(debug=debug)
     with keyboard.Listener(
         on_press = car.keyDown,

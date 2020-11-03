@@ -109,14 +109,14 @@ void loop()
     if (flag)
     {
         inStringComplete();
-        Serial.print("cmd: ");
-        Serial.println(instruction);
-        for (int i = 0; i < valueBuffer; i++)
-        {
-            Serial.print(value[i]);
-            Serial.print("\t");
-        }
-        Serial.print('\n');
+//        Serial.print("cmd: ");
+//        Serial.println(instruction);
+//        for (int i = 0; i < valueBuffer; i++)
+//        {
+//            Serial.print(value[i]);
+//            Serial.print("\t");
+//        }
+//        Serial.print('\n');
         flag = 0;
     }
     MR.run();

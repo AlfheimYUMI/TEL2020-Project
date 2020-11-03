@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from pynput import keyboard
 from time import time, sleep
+from micon import Micon
 import socket
 
 HOST ='192.168.43.118'# 伺服器的主機名或者 IP 地址
@@ -15,12 +16,16 @@ rotationRatio = 0.2
 
 class Car:
     def __init__(self, host=HOST, port = PORT, debug=0):
+        self.debug = debug
         if not debug:
             self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             self.s.connect((host, port))
+        else:
+            self.s = 0
         self.V = (0,0)
-        self.a = (100,0,100,0,1)
+        self.a = (9,0,0,0,0,0)
         self.keys = {}
+        self.crab = 0
 
     def keyDown(self, key):
         try:
@@ -38,6 +43,11 @@ class Car:
 
     def update(self):
         print(self.keys)
+        if self.keys.get('p'):
+            self.V = (0, 0)
+            self.a = (9,)
+            return
+
         move = 1 if self.keys.get('w') else (-1 if self.keys.get('s') else 0)
         dire = 1 if self.keys.get('d') else (-1 if self.keys.get('a') else 0)
         
@@ -53,17 +63,35 @@ class Car:
             if dire:
                 speedL = -speed*dire
                 speedR = speed*dire
-        self.V = (speedL, speedR)
-    
+        self.V = (speedR, speedL)
+        for i in "123456789":
+            if self.keys.get(i):
+                self.a = (i,)
+                return
+        XX = 1 if self.keys.get('i') else (-1 if self.keys.get('k') else 0)
+        YY = 1 if self.keys.get('j') else (-1 if self.keys.get('l') else 0)
+        ZZ = 1 if self.keys.get('u') else (-1 if self.keys.get('o') else 0)
+        AA = 1 if self.keys.get('m') else (-1 if self.keys.get(',') else 0)
+        self.a = (0, XX, YY, ZZ, AA, 0)
     def send(self):
-        self.s.sendall(bytes(F"[V,{','.join(map(str,self.V))}]", 'utf-8'))
-        self.s.sendall(bytes(F"[a,{','.join(map(str,self.a))}]", 'utf-8'))
+        if self.s:
+            self.s.sendall(bytes(F"[V,{','.join(map(str,self.V))}]", 'utf-8'))
+            self.s.sendall(bytes(F"[a,{','.join(map(str,self.a))}]", 'utf-8'))
+        else:
+            return F"[V,{','.join(map(str,self.V))}]"+F"[a,{','.join(map(str,self.a))}]"
 
 if __name__ == "__main__":
-    car = Car(debug=0)
+    debug = 1
+    micon = Micon()
+    micon.connect(force=1)
+    micon.start()
+    car = Car(debug=debug)
     with keyboard.Listener(
         on_press = car.keyDown,
         on_release = car.keyUp) as listener:
         while not stop:
             sleep(0.1)
-            car.send()
+            if debug:
+                micon.write(car.send())
+            else:
+                car.send()

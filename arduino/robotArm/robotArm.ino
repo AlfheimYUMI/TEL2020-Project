@@ -1,6 +1,6 @@
 #include <Timer.h>
 #include <Servo.h>
-#define BAUDRATE 9600
+#define BAUDRATE 115200
 #define valueBuffer 8
 #define startchar '['
 #define endchar ']'

@@ -17,13 +17,13 @@ class Micon(Thread):
         if self.ready:
             self.ser.close()
     
-    def connect(self, name='USB1', force = 0):
+    def connect(self, name='USB', force = 0):
         if force:
             self.ready = 0
         while not self.ready:
             for port in serial_ports(name):
                 try:
-                    self.ser = serial.Serial(port, 9600, timeout=100)
+                    self.ser = serial.Serial(port, 115200, timeout=100)
                     if force:
                         self.ready = 1
                         break

@@ -98,7 +98,7 @@ if __name__ == "__main__":
     micon.start()
     val = 0
     for i in range(5):
-        micon.write2(F'[V,{1000-i*100},{1000-i*100}]')
+        micon.write(F'[V,{1000-i*100},{1000-i*100}]')
         sleep(2)
 
-    micon.write2(F'[V,0,0]')
+    micon.write(F'[V,0,0]')

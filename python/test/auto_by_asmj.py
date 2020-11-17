@@ -1,7 +1,13 @@
 from myLidar import MyLidar
 from micon import Micon
 from time import sleep
+import math
 
+front = 270
+back  = 90
+left  = 0
+right = 180
+running = True
 
 print('conn lidar')
 lidar = MyLidar()
@@ -11,20 +17,26 @@ print('conn micon')
 micon = Micon()
 micon.connect(force=1)
 micon.start()
-while 1:
-    sleep(0.1)
-    print(lidar.data[270], lidar.data[269], lidar.data[271])
-    if lidar.data[270]<20:
-        print('stop')
-        micon.write(F'[V,0,0]')
-        continue
-    m = lidar.get_angle(270)
-    if abs(m)<0.006:
-        print('str')
-        micon.dealt(('V', 800,800))
-    elif m>0:
-        print('right')
-        micon.dealt(('V', 500,-500))
-    else:
-        print('left')
-        micon.dealt(('V', 500,-500))
+
+while running == True:
+    go_front(30,500,front - 10)
+    running = False
+
+def go_front(target,velocity,sight) :
+    done = True
+    while done == False :
+        if lidar.data[sight] * abs(math.cos(sight - 270)) >= target :
+            micon.write(F'[V,%d,%d]' % (velocity,velocity))
+        else:
+            done = True
+        sleep(0.1)
+    micon.write(F'[V,0,0]')
+
+def go_back(target,velocity,sight) :
+    done = True
+    while done == False :
+        if lidar.data[sight] * abs(math.cos(sight - 270)) >= target :
+            micon.write(F'[V,%d,%d]' % ( -1*velocity, -1*velocity))
+        else:
+            done = True
+    micon.write(F'[V,0,0]')

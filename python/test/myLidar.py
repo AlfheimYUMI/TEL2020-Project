@@ -82,21 +82,27 @@ class MyLidar(Thread):
         return angle  # (distance, sin(angle))
 
     def connect(self, force=0):
-        ret = self._pi.hardware_PWM(12, 1000, self.output)
-        sleep(1)
-        if force:
-            self.ready = 0
-        while not self.ready:
-            ports = serial_ports()
-            print(ports)
-            for port in ports:
-                print(port)
-                try:
-                    if self.lidar.connect(port=port):
-                        self.ready = 1
-                        break
-                except:
-                    pass
+        try:
+            if self.lidar.connect(port='/dev/ttyUSB0'):
+                self.ready = 1
+                break
+        except:
+            pass
+        # ret = self._pi.hardware_PWM(12, 1000, self.output)
+        # sleep(1)
+        # if force:
+        #     self.ready = 0
+        # while not self.ready:
+        #     ports = serial_ports()
+        #     print(ports)
+        #     for port in ports:
+        #         print(port)
+        #         try:
+        #             if self.lidar.connect(port=port):
+        #                 self.ready = 1
+        #                 break
+        #         except:
+        #             pass
 
     def disconnect(self):
         self.lidar.disconnect()

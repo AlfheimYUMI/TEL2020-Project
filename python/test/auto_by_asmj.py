@@ -18,7 +18,7 @@ micon.start()
 
 def go_front(target,velocity,sight) :
     while 1 :
-        if lidar.data[sight] * abs(math.cos(sight - 270)) >= target :
+        if lidar.data[sight] * abs(math.cos(sight - 270)) >= target or lidar.data[sight] == 0:
             micon.write(F'[V,{velocity},{velocity}]')
         else:
             break
@@ -37,5 +37,5 @@ if __name__ == "__main__":
 
     running = True
     while running == True:
-        go_front(300,500,front-10)
+        go_front(300,500,front)
         running = False

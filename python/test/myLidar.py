@@ -167,7 +167,6 @@ if __name__ == "__main__":
     # micon.start()
     # while 1:
     #     sleep(0.1)
-    #     print(lidar.data[270], lidar.data[269], lidar.data[271])
     #     if lidar.data[270]<100:
     #         print('stop')
     #         micon.dealt(('V', 0,0))
@@ -183,6 +182,7 @@ if __name__ == "__main__":
     #         print('left')
     #         micon.dealt(('V', -100,100))
     for i in range(100):
+        print(lidar.data[270], lidar.data[269], lidar.data[271])
         print('F',lidar.get_angle(270))
         print('S',lidar.get_angle(0))
         print('B',lidar.get_angle(90))

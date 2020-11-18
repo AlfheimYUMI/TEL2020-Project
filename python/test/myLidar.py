@@ -85,7 +85,6 @@ class MyLidar(Thread):
         try:
             if self.lidar.connect(port='/dev/ttyUSB0'):
                 self.ready = 1
-                break
         except:
             pass
         # ret = self._pi.hardware_PWM(12, 1000, self.output)

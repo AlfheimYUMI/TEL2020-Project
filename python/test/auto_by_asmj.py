@@ -17,15 +17,7 @@ micon.connect(force=1)
 micon.start()
 
 def go_front(target,velocity,sight) :
-    while 1 :
-        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
-            print(lidar.data[sight])
-            # micon.write(F'[V,{velocity},{velocity}]')
-        else:
-            break
-        sleep(0.1)
-    micon.write(F'[V,0,0]')
-
+    pass
 def go_back(target,velocity,sight) :
     while 1 :
         if lidar.data[sight] * abs(math.cos(sight - 270)) >= target :
@@ -35,8 +27,17 @@ def go_back(target,velocity,sight) :
     micon.write(F'[V,0,0]')
 
 if __name__ == "__main__":
+    
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            # micon.write(F'[V,{velocity},{velocity}]')
+        else:
+            break
+        sleep(0.1)
+    micon.write(F'[V,0,0]')
 
-    running = True
-    while running == True:
-        go_front(300,500,front)
-        running = False
+    # running = True
+    # while running == True:
+    #     go_front(300,500,front)
+    #     running = False

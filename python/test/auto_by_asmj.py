@@ -37,5 +37,5 @@ if __name__ == "__main__":
 
     running = True
     while running == True:
-        go_front(30,500,front-10)
+        go_front(300,500,front-10)
         running = False

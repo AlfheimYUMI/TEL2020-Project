@@ -28,7 +28,7 @@ def go_back(target,velocity,sight) :
 
 if __name__ == "__main__":
     sight=270
-    
+    target = 300
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
             print(lidar.data[sight])

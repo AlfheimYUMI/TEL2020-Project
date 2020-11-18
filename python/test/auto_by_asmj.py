@@ -27,6 +27,7 @@ def go_back(target,velocity,sight) :
     micon.write(F'[V,0,0]')
 
 if __name__ == "__main__":
+    sight=270
     
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:

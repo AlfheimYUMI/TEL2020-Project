@@ -32,7 +32,7 @@ if __name__ == "__main__":
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
             print(lidar.data[sight])
-            # micon.write(F'[V,{velocity},{velocity}]')
+            micon.write(F'[V,{velocity},{velocity}]')
         else:
             break
         sleep(0.1)

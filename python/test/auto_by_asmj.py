@@ -25,8 +25,9 @@ def go_back(target,velocity,sight) :
     micon.write(F'[V,0,0]')
 
 if __name__ == "__main__":
+
     sight    = front - 20  #偏右
-    target   = 300
+    target   = 400
     velocity = 500
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
@@ -58,8 +59,8 @@ if __name__ == "__main__":
         sleep(0.1)
     sleep(0.1)
 
-    sight    = 35  #偏右
-    target   = 400
+    sight    = 35
+    target   = 500
     velocity = 500
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
@@ -92,7 +93,7 @@ if __name__ == "__main__":
     sleep(0.1)
 
     sight    = front
-    target   = 200
+    target   = 250
     velocity = 500
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
@@ -105,7 +106,7 @@ if __name__ == "__main__":
 
     sleep(0.1)
     sight    = front
-    target   = 300
+    target   = 400
     velocity = 500
     while 1 :
         if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) <= target or lidar.data[sight] == 0:
@@ -117,6 +118,151 @@ if __name__ == "__main__":
         sleep(0.1)
     sleep(0.1)
 
+    sight    = 0
+    target   = 0.006
+    velocity = 500
+    delay    = 3
+    micon.write(F'[V,{velocity},{-velocity}]')
+    sleep(delay)
+    while 1 :
+        m = lidar.get_angle(sight)
+        if m > target :
+            print('right')
+            micon.write(F'[V,{velocity},{-velocity}]')
+        elif m < -target :
+            print('left')
+            micon.write(F'[V,{-velocity},{velocity}]')
+        else :
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sleep(0.1)
+    sight    = 360 - 35
+    target   = 500
+    velocity = 500
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) <= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            micon.write(F'[V,{-velocity},{-velocity}]')
+        else:
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sight    = front
+    target   = 0.006
+    velocity = 500
+    delay    = 3
+    micon.write(F'[V,{-velocity},{velocity}]')
+    sleep(delay)
+    while 1 :
+        m = lidar.get_angle(sight)
+        if m > target :
+            print('right')
+            micon.write(F'[V,{velocity},{-velocity}]')
+        elif m < -target :
+            print('left')
+            micon.write(F'[V,{-velocity},{velocity}]')
+        else :
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sight    = front
+    target   = 250
+    velocity = 500
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            micon.write(F'[V,{velocity},{velocity}]')
+        else:
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+
+    sight    = 0
+    target   = 0.006
+    velocity = 500
+    delay    = 3
+    micon.write(F'[V,{velocity},{-velocity}]')
+    sleep(delay)
+    while 1 :
+        m = lidar.get_angle(sight)
+        if m > target :
+            print('right')
+            micon.write(F'[V,{velocity},{-velocity}]')
+        elif m < -target :
+            print('left')
+            micon.write(F'[V,{-velocity},{velocity}]')
+        else :
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sleep(0.1)
+    sight    = front
+    target   = 400
+    velocity = 500
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) <= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            micon.write(F'[V,{-velocity},{-velocity}]')
+        else:
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sleep(0.1)
+    sight    = 35
+    target   = 500
+    velocity = 500
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) <= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            micon.write(F'[V,{-velocity},{-velocity}]')
+        else:
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sight    = front
+    target   = 0.006
+    velocity = 500
+    delay    = 3
+    micon.write(F'[V,{-velocity},{velocity}]')
+    sleep(delay)
+    while 1 :
+        m = lidar.get_angle(sight)
+        if m > target :
+            print('right')
+            micon.write(F'[V,{velocity},{-velocity}]')
+        elif m < -target :
+            print('left')
+            micon.write(F'[V,{-velocity},{velocity}]')
+        else :
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
+    sleep(0.1)
+
+    sight    = front
+    target   = 250
+    velocity = 500
+    while 1 :
+        if lidar.data[sight] * abs(math.cos(math.radians(sight - 270))) >= target or lidar.data[sight] == 0:
+            print(lidar.data[sight])
+            micon.write(F'[V,{velocity},{velocity}]')
+        else:
+            micon.write(F'[V,0,0]')
+            break
+        sleep(0.1)
 
 
 

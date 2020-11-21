@@ -25,6 +25,9 @@ def go_back(target,velocity,sight) :
     micon.write(F'[V,0,0]')
 
 if __name__ == "__main__":
+    micon.write('[a,2]')
+    sleep(3)
+    micon.write('[a,8]')
 
     sight    = front - 20  #偏右
     target   = 400

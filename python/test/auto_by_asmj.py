@@ -156,7 +156,7 @@ if __name__ == "__main__":
     sleep(0.1)
 
     sight    = front
-    target   = 0.006
+    target   = 0.0006
     velocity = 500
     delay    = 2
     micon.write(F'[V,{-velocity},{velocity}]')

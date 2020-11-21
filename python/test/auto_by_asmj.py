@@ -28,7 +28,8 @@ if __name__ == "__main__":
     micon.write('[a,2]')
     sleep(3)
     micon.write('[a,8]')
-
+  
+  
     sight    = front - 20  #偏右
     target   = 400
     velocity = 500

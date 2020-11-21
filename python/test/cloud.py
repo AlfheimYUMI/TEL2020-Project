@@ -4,7 +4,7 @@ from time import time, sleep
 from micon import Micon
 import socket
 
-HOST ='192.168.43.118'# 伺服器的主機名或者 IP 地址
+HOST ='192.168.0.2'# 伺服器的主機名或者 IP 地址
 PORT = 12301  # 伺服器使用的埠
 last = time()
 Heartbeat = 0.3  # sec

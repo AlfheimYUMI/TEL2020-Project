@@ -42,7 +42,7 @@ if __name__ == "__main__":
     sight    = 360 - 10
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{velocity},{-velocity}]')
     sleep(delay)
     while 1 :
@@ -75,7 +75,7 @@ if __name__ == "__main__":
     sight    = front
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{-velocity},{velocity}]')
     sleep(delay)
     while 1 :
@@ -121,7 +121,7 @@ if __name__ == "__main__":
     sight    = 0
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{velocity},{-velocity}]')
     sleep(delay)
     while 1 :
@@ -155,7 +155,7 @@ if __name__ == "__main__":
     sight    = front
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{-velocity},{velocity}]')
     sleep(delay)
     while 1 :
@@ -187,7 +187,7 @@ if __name__ == "__main__":
     sight    = 0
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{velocity},{-velocity}]')
     sleep(delay)
     while 1 :
@@ -235,7 +235,7 @@ if __name__ == "__main__":
     sight    = front
     target   = 0.006
     velocity = 500
-    delay    = 3
+    delay    = 2
     micon.write(F'[V,{-velocity},{velocity}]')
     sleep(delay)
     while 1 :
